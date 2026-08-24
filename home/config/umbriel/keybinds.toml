@@ -9,7 +9,7 @@
 "Mod+Shift+P" = "spawn:noctalia msg screenshot-fullscreen"
 
 "Mod+V" = "window-toggle-floating"
-"Mod+P" = "window-toggle-pinned"
+"Mod+K" = "window-toggle-pinned"
 "Mod+F" = "window-toggle-maximize"
 "Mod+Q" = "window-close"
 "Mod+Left" = "window-focus-left"

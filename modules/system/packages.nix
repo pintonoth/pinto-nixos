@@ -33,6 +33,7 @@
         "--enable-zero-copy"
       ];
     })
+    btop
     discord
     equibop
     fastfetch

@@ -8,6 +8,7 @@ match.app_id = "^dev.noctalia.UmbrielSharePicker$"
 default_floating = true
 default_size = [800, 600]
 
+#Steam games
 [[window_rule]]
 match.app_id = "^steam_app.*?$"
 default_floating = true
@@ -25,4 +26,28 @@ default_pinned = true
 
 [[window_rule]]
 match.app_id = "^kitty$"
-blur = false
+blur = true
+
+#workspace-2 apps
+[[window_rule]]
+match.app_id = "^(equibop|Spotify)$"
+default_workspace = 2
+
+#workspace-3 apps
+[[window_rule]]
+match.app_id = "^(heroic|steam)$"
+default_workspace = 3
+
+#workspace-5 apps
+[[window_rule]]
+match.app_id = "^dev.zed.Zed$"
+default_workspace = 5
+
+#Active/Inactive windows opacity
+[[window_rule]]
+match.is_focused = false
+opacity = 0.95
+
+[[window_rule]]
+match.is_focused = true
+opacity = 1.0

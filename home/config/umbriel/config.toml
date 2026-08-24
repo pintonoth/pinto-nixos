@@ -13,7 +13,7 @@ autostart = ["noctalia"]
 mod_key = "Super"
 xwayland = true
 show_cheatsheet = true
-focus_on_activate = false
+focus_on_activate = true
 honor_restored_maximize = false
 
 [workspaces]
@@ -23,7 +23,7 @@ back_and_forth = false
 prefer_no_csd = true
 border_width = 2
 outer_border_width = 0
-corner_radius = 10
+corner_radius = 0
 animation_ms = 250
 
 [appearance.blur]
@@ -37,10 +37,10 @@ contrast = 0.9
 saturation = 1.1
 
 [appearance.shadow]
-enabled = true
-softness = 10
-offset_x = 2
-offset_y = 2
+enabled = false
+softness = 25
+offset_x = 0
+offset_y = 0
 color = "#0000007F"
 
 [overview]
@@ -67,8 +67,8 @@ delay_ms = 500
 action = "spawn:notify-send 'Bottom right'"
 
 [layout]
-mode = "scrolling"
-gap = 14
+mode = "dwindle"
+gap = 8
 width_presets = [0.333, 0.5, 0.667]
 
 [layout.scrolling]
@@ -104,7 +104,7 @@ hide_when_typing = false
 hide_timeout_ms = 0
 
 [input.focus]
-follows_mouse = true
+follows_mouse = false
 
 [[layer_rule]]
 match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"

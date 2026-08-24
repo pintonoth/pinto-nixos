@@ -2,7 +2,7 @@
 "Mod+T" = "spawn:kitty"
 "Mod+E" = "spawn:thunar"
 "Mod+B" = "spawn:chromium"
-"Mod" = "spawn:noctalia msg panel-toggle launcher"
+"Mod+Return" = "spawn:noctalia msg panel-toggle launcher"
 "Mod+O" = "overview-toggle"
 "Alt+Tab" = "spawn:noctalia msg window-switcher"
 "Mod+P" = "spawn:noctalia msg screenshot-region"

@@ -1,0 +1,28 @@
+[[window_rule]]
+match.app_id = "^dev.noctalia.Noctalia$"
+default_floating = true
+default_size = [1020, 900]
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.UmbrielSharePicker$"
+default_floating = true
+default_size = [800, 600]
+
+[[window_rule]]
+match.app_id = "^steam_app.*?$"
+default_floating = true
+default_size = [1280, 720]
+default_focused = true
+default_position = { x = 0, y = 0 }
+default_workspace = 3
+
+# Steam notification toasts
+[[window_rule]]
+match.title = "^notificationtoasts_.+_desktop"
+default_position = { x = 0, y = 0, anchor = "bottom_right" }
+default_focused = false
+default_pinned = true
+
+[[window_rule]]
+match.app_id = "^kitty$"
+blur = false

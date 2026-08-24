@@ -33,4 +33,29 @@
 
     config.common.default = [ "gtk" ];
   };
+  programs.noctalia-greeter = {
+     enable = true;
+
+     settings = {
+       session = {
+         default = "niri";
+       };
+
+       appearance = {
+         scheme = "Catppuccin";
+         theme_mode = "dark";
+         corner_radius_scale = 1.0;
+       };
+
+       cursor = {
+         theme = "Bibata-Modern-Ice";
+         size = 24;
+         path = "${pkgs.bibata-cursors}/share/icons";
+       };
+
+       idle = {
+         timeout = 300;
+       };
+     };
+  };
 }

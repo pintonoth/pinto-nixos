@@ -5,9 +5,16 @@
     ./desktop-common.nix
   ];
 
-  home.packages = with pkgs; [
-    adw-gtk3
-  ];
+  programs.umbriel = {
+    enable = true;
+    settings = ./config/umbriel/config.toml;
+  };
+
+  xdg.configFile = {
+    "umbriel/keybinds.toml".source = ./config/umbriel/keybinds.toml;
+    "umbriel/outputs.toml".source = ./config/umbriel/outputs.toml;
+    "umbriel/windowrules.toml".source = ./config/umbriel/windowrules.toml;
+  };
 
   home.pointerCursor = {
     enable = true;
@@ -27,7 +34,6 @@
     enable = true;
 
     theme = {
-      # Must match the theme directory/index.theme supplied by catppuccin-gtk.
       name = "catppuccin-mocha-mauve-standard";
       package = pkgs.catppuccin-gtk.override {
         accents = [ "mauve" ];
@@ -40,7 +46,6 @@
       package = pkgs.papirus-icon-theme;
     };
   };
-  dconf.settings."org/gnome/desktop/interface" = {
-    color-scheme = "prefer-dark";
-  };
+
+  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
 }

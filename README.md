@@ -6,6 +6,7 @@ It includes several desktop setups that share the same base system configuration
 
 - KDE Plasma
 - Niri + Noctalia
+- Umbriel + Noctalia
 - Hyprland
 - COSMIC
 - KineticWE
@@ -29,6 +30,7 @@ Replace `pinto-nixos-niri` with the setup you want to use:
 | Setup | Flake output |
 | --- | --- |
 | Niri + Noctalia | `pinto-nixos-niri` |
+| Umbriel + Noctalia | `pinto-nixos-umbriel` |
 | KDE Plasma | `pinto-nixos-kde` |
 | Hyprland | `pinto-nixos-hyprland` |
 | COSMIC | `pinto-nixos-cosmic` |

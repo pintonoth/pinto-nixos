@@ -1,6 +1,14 @@
 spawn-at-startup "noctalia"
 spawn-at-startup "fcitx5"
 
+//workspace
+workspace "main"
+workspace "chill"
+workspace "game"
+workspace "study"
+workspace "work"
+
+//no border
 prefer-no-csd
 
 //output
@@ -141,9 +149,10 @@ window-rule {
 
 //window-rule steam games floating
 window-rule {
-    match app-id="^steam_app*?$"
+    match app-id="^steam_app.*?$"
     open-floating true
     open-focused true
     default-column-width { fixed 1280; }
     default-window-height { fixed 720;}
+    open-on-workspace "game"
 }

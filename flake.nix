@@ -7,6 +7,18 @@
       url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs"; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
     };
+    noctalia-greeter = {
+      url = "github:noctalia-dev/noctalia-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    umbriel = {
+      url = "git+https://github.com/noctalia-dev/umbriel";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    xdg-desktop-portal-umbriel = {
+      url = "github:noctalia-dev/xdg-desktop-portal-umbriel";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,7 +58,20 @@
             ./hardware-configuration.nix
             inputs.home-manager.nixosModules.default
             inputs.noctalia.nixosModules.default
+            inputs.noctalia-greeter.nixosModules.default
+          ];
+        };
 
+        pinto-nixos-umbriel = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/umbriel/configuration.nix
+            ./hardware-configuration.nix
+            inputs.home-manager.nixosModules.default
+            inputs.noctalia.nixosModules.default
+            inputs.noctalia-greeter.nixosModules.default
+            inputs.umbriel.nixosModules.default
           ];
         };
 

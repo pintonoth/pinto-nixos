@@ -5,6 +5,8 @@
 "Mod" = "spawn:noctalia msg panel-toggle launcher"
 "Mod+O" = "overview-toggle"
 "Alt+Tab" = "spawn:noctalia msg window-switcher"
+"Mod+P" = "spawn:noctalia msg screenshot-region"
+"Mod+Shift+P" = "spawn:noctalia msg screenshot-fullscreen"
 
 "Mod+V" = "window-toggle-floating"
 "Mod+P" = "window-toggle-pinned"

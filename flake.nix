@@ -23,7 +23,7 @@
       url = "github:noctalia-dev/xdg-desktop-portal-umbriel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     kineticwe = {
       url = "gitlab:theblackdon/kineticwe";
       inputs.nixpkgs.follows = "nixpkgs";

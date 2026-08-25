@@ -30,7 +30,7 @@ blur = true
 
 #workspace-2 apps
 [[window_rule]]
-match.app_id = "^(equibop|Spotify)$"
+match.app_id = "^(equibop|Spotify|com.pocoguy.Muse)$"
 default_workspace = 2
 
 #workspace-3 apps

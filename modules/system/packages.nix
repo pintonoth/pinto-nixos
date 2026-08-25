@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   ...
 }:
@@ -19,8 +20,31 @@
     remotePlay.openFirewall = false;
     dedicatedServer.openFirewall = true;
   };
+
+  # Flatpak configurations
   services.flatpak = {
     enable = true;
+    update.auto = {
+      enable = true;
+      onCalendar = "weekly";
+    };
+    remotes = [
+      {
+        name = "flathub";
+        location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+      }
+      {
+        name = "mixtapes";
+        location = "https://m-obeid.github.io/Mixtapes/mixtapes.flatpakrepo";
+      }
+    ];
+
+    packages = [
+      {
+        appId = "com.pocoguy.Muse";
+        origin = "mixtapes";
+      }
+    ];
   };
 
   fonts.packages = with pkgs; [
@@ -29,6 +53,12 @@
 
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+    btop
+    discord
+    equibop
+    fastfetch
+    ffmpeg
     git
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -36,7 +66,23 @@
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+    gpu-screen-recorder-gtk
+    heroic
+    kitty
+    lmstudio
+    mpv
+    nil
+    nixd
+    obsidian
+    pika-backup
+    playerctl
+    protonup-qt
+    qbittorrent
+    spotify
     steam
+    vlc
+    whatsapp-electron
     xwayland-satellite
+    zed-editor
   ];
 }

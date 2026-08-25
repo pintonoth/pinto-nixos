@@ -9,6 +9,7 @@
 {
   imports = [
     inputs.home-manager.nixosModules.default
+    inputs.nix-flatpak.nixosModules.nix-flatpak
     ../modules
   ];
 
@@ -16,7 +17,6 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs; };
-    sharedModules = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
     users.jensend = import ../home/desktop-common.nix;
   };
 

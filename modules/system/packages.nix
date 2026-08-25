@@ -1,6 +1,4 @@
 {
-  inputs,
-  config,
   pkgs,
   ...
 }:
@@ -19,10 +17,16 @@
       fastfetch --config examples/17.jsonc
     '';
   };
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = false;
+    dedicatedServer.openFirewall = true;
+  };
 
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
   ];
+
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
     (chromium.override {

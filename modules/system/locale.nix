@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   # Set your time zone & Select internationalisation properties
@@ -28,14 +28,14 @@
     ];
   };
 
-  services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
+  # services.xserver.enable = false;
+  # services.displayManager.sddm.enable = true;
 
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+  # services.xserver.xkb = {
+  #   layout = "us";
+  #   variant = "";
+  # };
 
   # Enable CUPS to print documents
-  services.printing.enable = true;
+  # services.printing.enable = true;
 }

@@ -25,10 +25,6 @@
       "x-scheme-handler/lmstudio" = [
         "lm-studio.desktop"
       ];
-      "application/pdf" = [ "org.pwmt.zathura.desktop" ];
-
-      "image/png" = [ "imv.desktop" ];
-      "image/jpeg" = [ "imv.desktop" ];
 
       "video/mp4" = [ "mpv.desktop" ];
     };

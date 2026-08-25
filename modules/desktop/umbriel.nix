@@ -1,6 +1,7 @@
 { inputs, pkgs, ... }:
 
 {
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
   programs.umbriel = {
     enable = true;
     portalPackage =
@@ -18,9 +19,7 @@
       session.default = "umbriel";
 
       appearance = {
-        scheme = "Catppuccin";
-        theme_mode = "dark";
-        corner_radius_scale = 1.0;
+        scheme = "Synced";
       };
 
       cursor = {
@@ -34,19 +33,9 @@
   };
 
   programs.dconf.enable = true;
-  programs.thunar.enable = true;
-  programs.xfconf.enable = true;
   programs.bash.shellAliases.fm = "yazi";
 
-  services.gvfs.enable = true;
-  services.tumbler.enable = true;
   services.gnome.gnome-keyring.enable = true;
 
   security.pam.services.greetd.enableGnomeKeyring = true;
-
-  environment.systemPackages = with pkgs; [
-    yazi
-    file
-    ffmpegthumbnailer
-  ];
 }

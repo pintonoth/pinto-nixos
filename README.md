@@ -1,92 +1,101 @@
 # Pinto's NixOS configuration
 
-My personal NixOS configuration, managed with Nix flakes and Home Manager.
+Personal NixOS configuration managed with Nix flakes and Home Manager. The primary setup is Umbriel with Noctalia and Noctalia Greeter.
 
-It includes several desktop setups that share the same base system configuration:
+## Primary configuration
 
-- KDE Plasma
-- Niri + Noctalia
-- Umbriel + Noctalia
-- Hyprland
-- COSMIC
-- KineticWE
-
-## Quick start
-
-Enter the configuration directory:
+Build the Umbriel configuration without activating it:
 
 ```bash
-cd pinto-nixos
+sudo nixos-rebuild build --flake .#pinto-nixos-umbriel
 ```
 
-Build and switch to a desktop setup:
+After reviewing the build result, activate it:
 
 ```bash
-sudo nixos-rebuild switch --flake .#pinto-nixos-niri
+sudo nixos-rebuild switch --flake .#pinto-nixos-umbriel
 ```
 
-Replace `pinto-nixos-niri` with the setup you want to use:
+The repository also contains these alternative desktop outputs:
 
 | Setup | Flake output |
 | --- | --- |
-| Niri + Noctalia | `pinto-nixos-niri` |
 | Umbriel + Noctalia | `pinto-nixos-umbriel` |
+| Niri + Noctalia | `pinto-nixos-niri` |
 | KDE Plasma | `pinto-nixos-kde` |
 | Hyprland | `pinto-nixos-hyprland` |
 | COSMIC | `pinto-nixos-cosmic` |
 | KineticWE | `pinto-nixos-kineticwe` |
 
-To only check whether a configuration builds:
-
-```bash
-sudo nixos-rebuild build --flake .#pinto-nixos-niri
-```
-
 ## Repository layout
 
 ```text
 pinto-nixos/
-├── flake.nix                  # Flake inputs and available desktop setups
-├── hardware-configuration.nix # Machine-specific hardware settings
+├── flake.nix                       # Inputs and NixOS configuration outputs
+├── flake.lock                      # Locked dependency revisions
+├── hardware-configuration.nix      # Machine-specific hardware configuration
 ├── hosts/
-│   ├── common.nix             # Settings shared by every setup
-│   └── <desktop>/             # One entry point per desktop setup
+│   ├── common.nix                  # Settings shared by the desktop outputs
+│   └── umbriel/configuration.nix   # Umbriel system and Home Manager entry point
 ├── modules/
-│   ├── system/                # Shared system settings: audio, network, drives, packages
-│   ├── desktop/               # Desktop-specific system settings
-│   └── others/                # Gaming, virtualization, maintenance, and file manager settings
+│   ├── desktop/umbriel.nix         # Umbriel, Noctalia, greeter, and keyring
+│   ├── system/                     # Audio, locale, network, drives, and packages
+│   └── others/                     # File manager, gaming, maintenance, and virtualization
 └── home/
-    ├── desktop-common.nix     # Shared user-level settings
-    ├── niri.nix               # Niri user settings, GTK theme, cursor, and Niri config
-    └── config/                # Application configuration files
+    ├── desktop-common.nix           # Shared Home Manager and MIME settings
+    ├── kitty.nix                    # Kitty configuration deployment
+    ├── umbriel.nix                  # Umbriel user settings, cursor, and GTK theme
+    └── config/
+        ├── kitty/                   # Kitty configuration files
+        └── umbriel/                 # Umbriel TOML configuration files
 ```
 
-## Where to make changes
+## Umbriel configuration
 
-- Add or remove system packages: `modules/system/packages.nix`
-- Change shared system settings: `hosts/common.nix`
-- Change Niri, Noctalia, portals, or Thunar: `modules/desktop/noctalia.nix`
-- Change Niri keybindings and layout: `home/config/niri/config.kdl`
-- Change Niri GTK theme or cursor: `home/niri.nix`
-- Change Kitty: `home/kitty.nix` and `home/config/kitty/kitty.conf`
+The Umbriel setup is divided between system-level and user-level configuration:
 
-## Updating flake inputs
+- `modules/desktop/umbriel.nix` enables Umbriel, Noctalia, Noctalia Greeter, the Umbriel portal, and GNOME Keyring integration.
+- `home/umbriel.nix` configures the GTK theme and cursor, and deploys the Umbriel configuration through Home Manager.
+- `home/config/umbriel/config.toml` contains the main compositor configuration.
+- `home/config/umbriel/keybinds.toml` contains keyboard shortcuts.
+- `home/config/umbriel/outputs.toml` contains monitor settings.
+- `home/config/umbriel/windowrules.toml` contains application and workspace rules.
 
-Update locked dependencies:
+Umbriel loads the three supplemental TOML files through the `include.files` list in `config.toml`.
+
+## Common changes
+
+| Change | File |
+| --- | --- |
+| Umbriel, Noctalia, greeter, or portal | `modules/desktop/umbriel.nix` |
+| Umbriel keybindings or layout | `home/config/umbriel/` |
+| GTK theme or cursor | `home/umbriel.nix` |
+| System packages | `modules/system/packages.nix` |
+| Locale, input method, or printing | `modules/system/locale.nix` |
+| Kitty settings | `home/config/kitty/kitty.conf` |
+| Shared Home Manager settings | `home/desktop-common.nix` |
+| Boot, hostname, user, or kernel | `hosts/common.nix` |
+
+## Updating dependencies
+
+Update every flake input:
 
 ```bash
 nix flake update
 ```
 
-Then rebuild the setup you use:
+To update only the Umbriel-specific dependencies:
 
 ```bash
-sudo nixos-rebuild switch --flake .#pinto-nixos-niri
+nix flake update umbriel noctalia noctalia-greeter xdg-desktop-portal-umbriel
 ```
+
+Review `flake.lock`, then build the Umbriel output before switching.
 
 ## Notes
 
-- The shared hostname is currently `nixos`.
-- The main user is `jensend`.
-- This configuration uses the unstable Nixpkgs channel.
-- `hardware-configuration.nix` is machine-specific. Do not copy it to another machine without regenerating it.
+- The system uses NixOS unstable.
+- The configured hostname is `nixos` and the main user is `jensend`.
+- Noctalia Greeter uses greetd and starts the Umbriel session by default.
+- `hardware-configuration.nix` is specific to this machine and should be regenerated for different hardware.
+- Do not change `system.stateVersion` or `home.stateVersion` merely when updating NixOS; they preserve compatibility with the original installation state.

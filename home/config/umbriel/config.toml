@@ -9,7 +9,14 @@ files = [
 ]
 
 [general]
-autostart = ["noctalia"]
+autostart = [
+    "noctalia",
+    "equibop",
+    "spotify",
+    "whatsapp-electron",
+    "steam",
+    "heroic"
+]
 mod_key = "Super"
 xwayland = true
 show_cheatsheet = true

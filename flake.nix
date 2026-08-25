@@ -5,7 +5,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     noctalia = {
       url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs"; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia-greeter = {
       url = "github:noctalia-dev/noctalia-greeter";
@@ -19,12 +23,13 @@
       url = "github:noctalia-dev/xdg-desktop-portal-umbriel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
     kineticwe = {
       url = "gitlab:theblackdon/kineticwe";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -46,7 +51,6 @@
           modules = [
             ./hosts/kde/configuration.nix
             ./hardware-configuration.nix
-            inputs.home-manager.nixosModules.default
           ];
         };
 
@@ -56,7 +60,6 @@
           modules = [
             ./hosts/niri/configuration.nix
             ./hardware-configuration.nix
-            inputs.home-manager.nixosModules.default
             inputs.noctalia.nixosModules.default
             inputs.noctalia-greeter.nixosModules.default
           ];
@@ -68,7 +71,6 @@
           modules = [
             ./hosts/umbriel/configuration.nix
             ./hardware-configuration.nix
-            inputs.home-manager.nixosModules.default
             inputs.noctalia.nixosModules.default
             inputs.noctalia-greeter.nixosModules.default
             inputs.umbriel.nixosModules.default

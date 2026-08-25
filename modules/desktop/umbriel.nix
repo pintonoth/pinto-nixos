@@ -8,6 +8,8 @@
       inputs.xdg-desktop-portal-umbriel.packages.${pkgs.stdenv.hostPlatform.system}.default;
   };
 
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   programs.noctalia = {
     enable = true;
     recommendedServices.enable = true;
@@ -31,9 +33,6 @@
       idle.timeout = 300;
     };
   };
-
-  programs.dconf.enable = true;
-  programs.bash.shellAliases.fm = "yazi";
 
   services.gnome.gnome-keyring.enable = true;
 

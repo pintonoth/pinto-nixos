@@ -13,14 +13,14 @@
   programs.gpu-screen-recorder.enable = true;
   programs.bash = {
     enable = true;
-    interactiveShellInit = ''
-      fastfetch --config examples/17.jsonc
-    '';
   };
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = false;
     dedicatedServer.openFirewall = true;
+  };
+  services.flatpak = {
+    enable = true;
   };
 
   fonts.packages = with pkgs; [
@@ -29,20 +29,6 @@
 
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
-    (chromium.override {
-      enableWideVine = true;
-      commandLineArgs = [
-        "--enable-features=AcceleratedVideoEncoder"
-        "--enable-features=VerticalTabs"
-        "--ignore-gpu-blocklist"
-        "--enable-zero-copy"
-      ];
-    })
-    btop
-    discord
-    equibop
-    fastfetch
-    ffmpeg
     git
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -50,23 +36,7 @@
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
-    gpu-screen-recorder-gtk
-    heroic
-    kitty
-    mpv
-    nil
-    nixd
-    lmstudio
-    obsidian
-    playerctl
-    pika-backup
-    protonup-qt
-    qbittorrent
-    spotify
     steam
-    vlc
-    zed-editor
-    whatsapp-electron
     xwayland-satellite
   ];
 }

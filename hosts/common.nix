@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   lib,
   config,
@@ -7,8 +8,17 @@
 
 {
   imports = [
+    inputs.home-manager.nixosModules.default
     ../modules
   ];
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    extraSpecialArgs = { inherit inputs; };
+    sharedModules = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
+    users.jensend = import ../home/desktop-common.nix;
+  };
 
   # Experimental features enabled for future flake readiness
   nix.settings.experimental-features = [
@@ -33,6 +43,8 @@
   # Networking options
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
+
+  programs.dconf.enable = true;
 
   # Define user account "jensend"
   users.users."jensend" = {

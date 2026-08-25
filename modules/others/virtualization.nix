@@ -5,12 +5,21 @@
   users.users."jensend".extraGroups = [ "libvirtd" ];
 
   # Enable the libvirt daemon
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+
+    qemu = {
+      package = pkgs.qemu_kvm;
+    };
+  };
 
   # Install the virt-manager GUI application
   programs.virt-manager.enable = true;
 
   environment.systemPackages = with pkgs; [
     vm-curator
+    qemu_full
+    virglrenderer
+    virt-viewer
   ];
 }

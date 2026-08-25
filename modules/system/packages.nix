@@ -12,6 +12,7 @@
   # Core applications
   # programs.firefox.enable = true;
   programs.nix-ld.enable = true;
+  programs.gpu-screen-recorder.enable = true;
   programs.bash = {
     enable = true;
     interactiveShellInit = ''
@@ -45,6 +46,7 @@
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+    gpu-screen-recorder-gtk
     heroic
     kitty
     mpv

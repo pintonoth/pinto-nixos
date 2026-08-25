@@ -36,10 +36,13 @@
   programs.dconf.enable = true;
   programs.thunar.enable = true;
   programs.xfconf.enable = true;
+  programs.bash.shellAliases.fm = "yazi";
+
   services.gvfs.enable = true;
   services.tumbler.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
-  programs.bash.shellAliases.fm = "yazi";
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   environment.systemPackages = with pkgs; [
     yazi

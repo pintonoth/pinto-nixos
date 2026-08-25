@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   #Add user to group libvirtd
@@ -9,4 +9,8 @@
 
   # Install the virt-manager GUI application
   programs.virt-manager.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    vm-curator
+  ];
 }

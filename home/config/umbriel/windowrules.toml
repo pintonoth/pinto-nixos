@@ -1,5 +1,5 @@
 [[window_rule]]
-match.app_id = "^dev.noctalia.Noctalia$"
+match.app_id = "^(dev.noctalia.Noctalia|xdg-desktop-portal-gtk)$"
 default_floating = true
 default_size = [1020, 900]
 

@@ -73,6 +73,7 @@
     mpv
     nil
     nixd
+    nordvpn
     obsidian
     pika-backup
     playerctl
@@ -81,7 +82,6 @@
     spotify
     steam
     vlc
-    whatsapp-electron
     xwayland-satellite
     zed-editor
   ];

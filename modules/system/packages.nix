@@ -89,5 +89,6 @@
     xwayland-satellite
     zed-editor
     libayatana-appindicator
+    unzip
   ];
 }

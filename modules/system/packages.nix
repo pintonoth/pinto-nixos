@@ -21,6 +21,7 @@
     dedicatedServer.openFirewall = true;
   };
   programs.solaar.enable = true;
+  hardware.logitech.wireless.enable = true;
   services.nordvpn.enable = true;
   # Flatpak configurations
   services.flatpak = {
@@ -87,6 +88,6 @@
     vlc
     xwayland-satellite
     zed-editor
-    libayatana-appindicator-gtk3
+    libayatana-appindicator
   ];
 }

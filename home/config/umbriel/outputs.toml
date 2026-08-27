@@ -1,5 +1,5 @@
 [output.HDMI-A-1]
-mode = "3840x2160@120"
+mode = "3840x2160@100"
 position = [0, 0]
 scale = 2.0
 vrr = "disabled"

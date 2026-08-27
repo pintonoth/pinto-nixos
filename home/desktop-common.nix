@@ -54,6 +54,11 @@
 
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
 
+  # Used by Thunar's "Open Terminal Here" action through exo-open.
+  xdg.configFile."xfce4/helpers.rc".text = ''
+    TerminalEmulator=kitty
+  '';
+
   xdg.mimeApps = {
     enable = true;
 
@@ -72,6 +77,10 @@
 
       "x-scheme-handler/lmstudio" = [
         "lm-studio.desktop"
+      ];
+
+      "x-scheme-handler/nordvpn" = [
+        "nordvpn.desktop"
       ];
 
       "video/mp4" = [ "mpv.desktop" ];

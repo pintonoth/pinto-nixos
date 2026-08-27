@@ -3,9 +3,11 @@
 
 [include]
 files = [
+    "animation.toml",
     "keybinds.toml",
     "windowrules.toml",
-    "outputs.toml"
+    "outputs.toml",
+    "appearance.toml"
 ]
 
 [general]
@@ -13,7 +15,6 @@ autostart = [
     "noctalia",
     "equibop",
     "flatpak run com.pocoguy.Muse",
-    "whatsapp-electron",
     "steam",
     "heroic"
 ]
@@ -25,30 +26,6 @@ honor_restored_maximize = false
 
 [workspaces]
 back_and_forth = false
-
-[appearance]
-prefer_no_csd = true
-border_width = 2
-outer_border_width = 0
-corner_radius = 0
-animation_ms = 250
-
-[appearance.blur]
-enabled = true
-optimized = true
-passes = 3
-radius = 3
-noise = 0.02
-brightness = 0.9
-contrast = 0.9
-saturation = 1.1
-
-[appearance.shadow]
-enabled = false
-softness = 25
-offset_x = 0
-offset_y = 0
-color = "#0000007F"
 
 [overview]
 zoom = 0.5

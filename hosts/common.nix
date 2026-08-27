@@ -1,8 +1,6 @@
 {
   inputs,
   pkgs,
-  lib,
-  config,
   ...
 }:
 
@@ -53,6 +51,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "nordvpn"
     ];
     packages = with pkgs; [
       kdePackages.kate

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   services.openssh.enable = true;
@@ -7,4 +7,26 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking.firewall.checkReversePath = "loose";
+  networking.nameservers = [
+    "8.8.8.8"
+    "8.8.4.4"
+  ];
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (
+        subject.user == "nordvpn"
+        && (
+          action.id == "org.freedesktop.resolve1.set-dns-servers"
+          || action.id == "org.freedesktop.resolve1.set-domains"
+          || action.id == "org.freedesktop.resolve1.set-default-route"
+          || action.id == "org.freedesktop.resolve1.set-dnssec"
+          || action.id == "org.freedesktop.resolve1.flush-caches"
+          || action.id == "org.freedesktop.resolve1.revert"
+        )
+      ) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
 }

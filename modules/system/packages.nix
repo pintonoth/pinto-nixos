@@ -21,6 +21,7 @@
     dedicatedServer.openFirewall = true;
   };
 
+  services.nordvpn.enable = true;
   # Flatpak configurations
   services.flatpak = {
     enable = true;
@@ -58,6 +59,7 @@
     discord
     equibop
     fastfetch
+    faugus-launcher
     ffmpeg
     git
     gst_all_1.gstreamer
@@ -79,6 +81,7 @@
     playerctl
     protonup-qt
     qbittorrent
+    solaar
     spotify
     steam
     vlc

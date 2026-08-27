@@ -20,7 +20,7 @@
     remotePlay.openFirewall = false;
     dedicatedServer.openFirewall = true;
   };
-
+  programs.solaar.enable = true;
   services.nordvpn.enable = true;
   # Flatpak configurations
   services.flatpak = {
@@ -87,5 +87,6 @@
     vlc
     xwayland-satellite
     zed-editor
+    libayatana-appindicator-gtk3
   ];
 }

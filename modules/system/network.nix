@@ -9,8 +9,8 @@
   # networking.firewall.enable = false;
   networking.firewall.checkReversePath = "loose";
   networking.nameservers = [
-    "8.8.8.8"
-    "8.8.4.4"
+    "1.1.1.1"
+    "1.0.0.1"
   ];
   security.polkit.extraConfig = ''
     polkit.addRule(function(action, subject) {

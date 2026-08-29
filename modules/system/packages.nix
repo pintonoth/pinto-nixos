@@ -50,9 +50,17 @@
   };
 
   fonts.packages = with pkgs; [
+    inter
+    noto-fonts
     nerd-fonts.jetbrains-mono
+    noto-fonts-color-emoji
   ];
-
+  fonts.fontconfig.defaultFonts = {
+    sansSerif = [ "JetBrainsMono Nerd Font" ];
+    serif = [ "JetBrainsMono Nerd Font" ];
+    monospace = [ "JetBrainsMono Nerd Font" ];
+    emoji = [ "Noto Color Emoji" ];
+  };
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default

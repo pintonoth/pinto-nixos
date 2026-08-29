@@ -38,6 +38,12 @@
   gtk = {
     enable = true;
 
+    font = {
+      name = "JetBrainsMono Nerd Font";
+      size = 10;
+      package = pkgs.nerd-fonts.jetbrains-mono;
+    };
+
     theme = {
       name = "catppuccin-mocha-mauve-standard";
       package = pkgs.catppuccin-gtk.override {

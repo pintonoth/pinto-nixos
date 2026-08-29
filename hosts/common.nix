@@ -7,6 +7,7 @@
 {
   imports = [
     inputs.home-manager.nixosModules.default
+    inputs.stylix.nixosModules.stylix
     inputs.nix-flatpak.nixosModules.nix-flatpak
     ../modules
   ];

@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ ... }:
 
 {
   imports = [
@@ -21,43 +18,9 @@
 
   home.stateVersion = "26.05";
 
-  home.pointerCursor = {
-    enable = true;
-    gtk.enable = true;
-    x11.enable = true;
-    package = pkgs.bibata-cursors;
-    name = "Bibata-Modern-Ice";
-    size = 24;
-  };
+  stylix.targets.gtk.enable = true;
 
-  home.sessionVariables = {
-    XCURSOR_THEME = "Bibata-Modern-Ice";
-    XCURSOR_SIZE = "24";
-  };
-
-  gtk = {
-    enable = true;
-
-    font = {
-      name = "JetBrainsMono Nerd Font";
-      size = 10;
-      package = pkgs.nerd-fonts.jetbrains-mono;
-    };
-
-    theme = {
-      name = "catppuccin-mocha-mauve-standard";
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ "mauve" ];
-        variant = "mocha";
-      };
-    };
-
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-  };
-
+  # Stylix does not set the desktop-wide libadwaita color-scheme preference.
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
 
   # Used by Thunar's "Open Terminal Here" action through exo-open.

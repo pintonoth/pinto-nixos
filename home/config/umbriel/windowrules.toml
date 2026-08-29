@@ -24,9 +24,26 @@ default_position = { x = 0, y = 0, anchor = "bottom_right" }
 default_focused = false
 default_pinned = true
 
+#kitty
 [[window_rule]]
 match.app_id = "^kitty$"
 blur = true
+
+#Picture in Picture window_rule
+[[window_rule]]
+match.title = "^Picture[_-]*in[_-]*Picture$"
+default_floating = true
+default_size = [ 400, 300 ]
+default_position = { x = 0, y = 0, anchor = "top_right" }
+
+#Active/Inactive windows opacity
+[[window_rule]]
+match.is_focused = false
+opacity = 0.95
+
+[[window_rule]]
+match.is_focused = true
+opacity = 1.0
 
 #workspace-2 apps
 [[window_rule]]
@@ -37,12 +54,3 @@ default_workspace = 2
 [[window_rule]]
 match.app_id = "^(heroic|steam)$"
 default_workspace = 3
-
-#Active/Inactive windows opacity
-[[window_rule]]
-match.is_focused = false
-opacity = 0.95
-
-[[window_rule]]
-match.is_focused = true
-opacity = 1.0

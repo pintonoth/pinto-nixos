@@ -57,7 +57,6 @@
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     btop
-    discord
     equibop
     fastfetch
     faugus-launcher
@@ -70,7 +69,6 @@
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     gpu-screen-recorder-gtk
-    heroic
     kitty
     lmstudio
     mpv
@@ -90,5 +88,7 @@
     zed-editor
     libayatana-appindicator
     unzip
+    xarchiver
+    zip
   ];
 }

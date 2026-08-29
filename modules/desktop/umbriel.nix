@@ -2,12 +2,7 @@
 
 {
   # environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  programs.umbriel = {
-    enable = true;
-    portalPackage =
-      inputs.xdg-desktop-portal-umbriel.packages.${pkgs.stdenv.hostPlatform.system}.default;
-  };
-
+  programs.umbriel.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   programs.noctalia = {

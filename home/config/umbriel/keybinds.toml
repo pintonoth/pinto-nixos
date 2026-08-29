@@ -1,11 +1,11 @@
 [keybinds]
-"Mod+T" = "spawn:kitty"
+"Mod+Return" = "spawn:kitty"
 "Mod+E" = "spawn:thunar"
 "Mod+B" = "spawn:zen"
 "Mod+Z" = "spawn:zeditor"
-"Mod+Return" = "spawn:noctalia msg panel-toggle launcher"
+"Mod" = "spawn:noctalia msg panel-toggle launcher"
 "Mod+O" = "overview-toggle"
-"Alt+Tab" = "spawn:noctalia msg window-switcher"
+"Alt+Tab" = { action = "spawn:noctalia msg window-switcher", repeat = false }
 "Mod+P" = "spawn:noctalia msg screenshot-region"
 "Mod+Shift+P" = "spawn:noctalia msg screenshot-fullscreen"
 

@@ -19,15 +19,7 @@
       url = "git+https://github.com/noctalia-dev/umbriel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    xdg-desktop-portal-umbriel = {
-      url = "github:noctalia-dev/xdg-desktop-portal-umbriel";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    kineticwe = {
-      url = "gitlab:theblackdon/kineticwe";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -77,25 +69,6 @@
           ];
         };
 
-        pinto-nixos-hyprland = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/hyprland/configuration.nix
-            ./hardware-configuration.nix
-            inputs.home-manager.nixosModules.default
-          ];
-        };
-        pinto-nixos-kineticwe = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/kineticwe/configuration.nix
-            ./hardware-configuration.nix
-            inputs.home-manager.nixosModules.default
-            inputs.kineticwe.nixosModules.default
-          ];
-        };
         pinto-nixos-cosmic = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };

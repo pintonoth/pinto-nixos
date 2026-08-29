@@ -38,12 +38,6 @@ default_workspace = 2
 match.app_id = "^(heroic|steam)$"
 default_workspace = 3
 
-#workspace-5 apps
-[[window_rule]]
-match.app_id = "^dev.zed.Zed$"
-default_workspace = 5
-default_floating = true
-
 #Active/Inactive windows opacity
 [[window_rule]]
 match.is_focused = false

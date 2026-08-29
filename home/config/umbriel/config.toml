@@ -14,9 +14,7 @@ files = [
 autostart = [
     "noctalia",
     "equibop",
-    "flatpak run com.pocoguy.Muse",
     "steam",
-    "heroic"
 ]
 mod_key = "Super"
 xwayland = true

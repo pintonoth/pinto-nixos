@@ -12,5 +12,6 @@
     "umbriel/windowrules.toml".source = ./config/umbriel/windowrules.toml;
     "umbriel/appearance.toml".source = ./config/umbriel/appearance.toml;
     "umbriel/animation.toml".source = ./config/umbriel/animation.toml;
+    "umbriel/layout.toml".source = ./config/umbriel/layout.toml;
   };
 }

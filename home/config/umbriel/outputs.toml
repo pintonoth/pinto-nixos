@@ -1,6 +1,31 @@
 [output.HDMI-A-1]
-mode = "3840x2160@100"
+mode = "3840x2160@120"
 position = [0, 0]
 scale = 2.0
 vrr = "disabled"
-workspaces = 5
+workspaces = [ "main", "chill", "games", "study", "work" ]
+
+[[workspace]]
+output = "HDMI-A-1"
+name = "main"
+layout.mode = "scrolling"
+
+[[workspace]]
+output = "HDMI-A-1"
+name = "chill"
+layout.mode = "scrolling"
+
+[[workspace]]
+output = "HDMI-A-1"
+name = "games"
+layout.mode = "scrolling"
+
+[[workspace]]
+output = "HDMI-A-1"
+name = "study"
+layout.mode = "master"
+
+[[workspace]]
+output = "HDMI-A-1"
+name = "work"
+layout.mode = "dwindle"

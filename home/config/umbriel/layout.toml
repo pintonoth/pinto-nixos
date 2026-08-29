@@ -1,0 +1,17 @@
+[layout]
+mode = "scrolling"
+gap = 8
+width_presets = [0.333, 0.5, 0.667]
+
+[layout.scrolling]
+direction = "horizontal"
+default_width_fraction = 0.5
+center_underfull_strip = true
+expand_single_column = true
+
+[layout.dwindle]
+preserve_split = false
+
+[layout.master]
+position = "left"
+default_width_fraction = 0.50

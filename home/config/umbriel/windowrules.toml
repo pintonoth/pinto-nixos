@@ -33,7 +33,9 @@ blur = true
 [[window_rule]]
 match.title = "^Picture[_-]*in[_-]*Picture$"
 default_floating = true
-default_size = [ 400, 300 ]
+default_size = [ 480, 270 ]
+default_pinned = true
+default_focused = false
 default_position = { x = 0, y = 0, anchor = "top_right" }
 
 #Active/Inactive windows opacity
@@ -48,9 +50,16 @@ opacity = 1.0
 #workspace-2 apps
 [[window_rule]]
 match.app_id = "^(equibop|Spotify|com.pocoguy.Muse)$"
+default_focused = false
 default_workspace = 2
 
 #workspace-3 apps
 [[window_rule]]
-match.app_id = "^(heroic|steam)$"
+match.app_id = "^(heroic|steam|io.github.Faugus.faugus-launcher)$"
+default_focused = false
 default_workspace = 3
+
+#workspace-5 apps
+[[window_rule]]
+match.app_id = "^dev.zed.Zed$"
+default_workspace = 5

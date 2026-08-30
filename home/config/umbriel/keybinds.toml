@@ -17,8 +17,9 @@
 "Mod+Right" = "window-focus-right"
 "Mod+Ctrl+Left" = "column-move-left"
 "Mod+Ctrl+Right" = "column-move-right"
-"Mod+9" = "window-consume-left"
-"Mod+0" = "window-expel-right"
+#Scrolling only
+"Mod+9" = "window-consume-or-expel-left"
+"Mod+0" = "window-consume-or-expel-right"
 "Mod+N" = "window-modify-width:-0.2"
 "Mod+M" = "window-modify-width:+0.2"
 "Mod+R" = "window-cycle-width"

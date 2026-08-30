@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -7,6 +7,12 @@
 
   home.username = "jensend";
   home.homeDirectory = "/home/jensend";
+  home.stateVersion = "26.05";
+  home.packages = with pkgs; [
+    bash-completion
+    fzf
+    zoxide
+  ];
 
   programs.bash = {
     enable = true;
@@ -16,7 +22,6 @@
     shellAliases.fm = "yazi";
   };
 
-  home.stateVersion = "26.05";
 
   stylix.targets.gtk.enable = true;
 
@@ -65,6 +70,56 @@
         "LM-Studio.desktop"
       ];
     };
+  };
+  programs.starship = {
+    enable = true;
+    enableBashIntegration = true;
 
+    settings = {
+      add_newline = false;
+
+      format = "$directory$git_branch$git_status$character";
+
+      directory = {
+        truncation_length = 3;
+        truncate_to_repo = false;
+      };
+
+      git_branch = {
+        symbol = " ";
+        format = "on [$symbol$branch]($style) ";
+        style = "bold purple";
+      };
+
+      git_status = {
+        format = "([$all_status$ahead_behind]($style)) ";
+        style = "bold yellow";
+
+        conflicted = "!";
+        ahead = "⇡$count";
+        behind = "⇣$count";
+        diverged = "⇕⇡$ahead_count⇣$behind_count";
+        untracked = "?";
+        stashed = "$";
+        modified = "!";
+        staged = "+";
+        renamed = "»";
+        deleted = "✘";
+      };
+
+      character = {
+        success_symbol = "[❯](bold green)";
+        error_symbol = "[❯](bold red)";
+      };
+    };
+  };
+  programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
   };
 }

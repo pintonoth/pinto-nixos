@@ -8,16 +8,6 @@
   };
   programs.niri.enable = true;
 
-  # XDG desktop portals
-  xdg.portal = {
-    enable = true;
-
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
-
-    config.common.default = [ "gtk" ];
-  };
   programs.noctalia-greeter = {
      enable = true;
 

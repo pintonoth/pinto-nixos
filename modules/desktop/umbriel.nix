@@ -3,8 +3,6 @@
 {
   # environment.sessionVariables.NIXOS_OZONE_WL = "1";
   programs.umbriel.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
   programs.noctalia = {
     enable = true;
     recommendedServices.enable = true;

@@ -28,14 +28,6 @@
     ];
   };
 
-  # services.xserver.enable = false;
-  # services.displayManager.sddm.enable = true;
-
-  # services.xserver.xkb = {
-  #   layout = "us";
-  #   variant = "";
-  # };
-
   # Enable CUPS to print documents
   # services.printing.enable = true;
 }

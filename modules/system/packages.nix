@@ -98,5 +98,6 @@
     unzip
     xarchiver
     zip
+    protonplus
   ];
 }

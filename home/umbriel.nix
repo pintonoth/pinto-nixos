@@ -1,6 +1,10 @@
 { ... }:
 
 {
+  imports = [
+    ./noctalia.nix
+  ];
+
   programs.umbriel = {
     enable = true;
     settings = ./config/umbriel/config.toml;

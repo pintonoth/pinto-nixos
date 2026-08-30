@@ -8,6 +8,13 @@ match.app_id = "^dev.noctalia.UmbrielSharePicker$"
 default_floating = true
 default_size = [800, 600]
 
+#Thunar
+[[window_rule]]
+match.app_id = "thunar"
+match.title = "File Operation Progress"
+default_floating = true
+default_size = [800, 600]
+
 #Steam games
 [[window_rule]]
 match.app_id = "^steam_app.*?$"
@@ -36,7 +43,7 @@ default_floating = true
 default_size = [ 480, 270 ]
 default_pinned = true
 default_focused = false
-default_position = { x = 0, y = 0, anchor = "top_right" }
+default_position = { x = 8, y = 8, anchor = "top_right" }
 
 #Active/Inactive windows opacity
 [[window_rule]]

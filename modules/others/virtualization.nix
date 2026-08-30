@@ -2,7 +2,10 @@
 
 {
   #Add user to group libvirtd
-  users.users."jensend".extraGroups = [ "libvirtd" ];
+  users.users."jensend".extraGroups = [
+    "kvm"
+    "libvirtd"
+  ];
 
   # Enable the libvirt daemon
   virtualisation = {
@@ -29,5 +32,6 @@
     spice-protocol
     spice-gtk
     spice
+    vm-curator
   ];
 }

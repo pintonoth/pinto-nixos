@@ -8,7 +8,8 @@ files = [
     "windowrules.toml",
     "outputs.toml",
     "appearance.toml",
-    "layout.toml"
+    "layout.toml",
+    "noctalia.toml"
 ]
 
 [general]

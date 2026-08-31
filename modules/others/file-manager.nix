@@ -11,9 +11,7 @@
   # File thumbnails
   services.tumbler.enable = true;
 
-  # Terminal file manager + useful thumbnail helper
   environment.systemPackages = with pkgs; [
-    yazi
     file
     ffmpegthumbnailer
   ];

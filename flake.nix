@@ -31,15 +31,8 @@
   };
 
   outputs =
+    { nixpkgs, ... }@inputs:
     {
-      self,
-      nixpkgs,
-      noctalia,
-      ...
-    }@inputs:
-    {
-      # use "nixos", or your hostname as the name of the configuration
-      # it's a better practice than "default" shown in the video
       nixosConfigurations = {
         pinto-nixos-kde = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";

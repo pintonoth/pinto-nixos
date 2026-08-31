@@ -1,8 +1,8 @@
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  # environment.sessionVariables.NIXOS_OZONE_WL = "1";
   programs.umbriel.enable = true;
+
   programs.noctalia = {
     enable = true;
     recommendedServices.enable = true;
@@ -28,6 +28,5 @@
   };
 
   services.gnome.gnome-keyring.enable = true;
-
   security.pam.services.greetd.enableGnomeKeyring = true;
 }

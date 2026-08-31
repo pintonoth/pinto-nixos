@@ -13,7 +13,7 @@ default_size = [800, 600]
 match.app_id = "thunar"
 match.title = "File Operation Progress"
 default_floating = true
-default_size = [800, 600]
+default_size = [300, 100]
 
 #Steam games
 [[window_rule]]
@@ -38,7 +38,7 @@ blur = true
 
 #Picture in Picture window_rule
 [[window_rule]]
-match.title = "^Picture[_-]*in[_-]*Picture$"
+match.title = "^(?:Picture[_-]in[_-]Picture|.+['’]s Stream)$"
 default_floating = true
 default_size = [ 480, 270 ]
 default_pinned = true

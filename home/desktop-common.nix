@@ -9,24 +9,29 @@
   home.homeDirectory = "/home/jensend";
   home.stateVersion = "26.05";
   home.packages = with pkgs; [
-    bash-completion
-    fzf
-    zoxide
+    adw-gtk3
+    glib
   ];
+
+  home.sessionVariables.GSETTINGS_SCHEMA_DIR =
+    pkgs.glib.getSchemaPath pkgs.gsettings-desktop-schemas;
 
   programs.bash = {
     enable = true;
+    enableCompletion = true;
     initExtra = ''
       fastfetch --config examples/17.jsonc
     '';
-    shellAliases.fm = "yazi";
   };
 
-
-  stylix.targets.gtk.enable = true;
+  stylix.targets.gtk.enable = false;
+  gtk.enable = true;
 
   # Stylix does not set the desktop-wide libadwaita color-scheme preference.
-  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  dconf.settings."org/gnome/desktop/interface" = {
+    color-scheme = "prefer-dark";
+    font-name = "JetBrainsMono Nerd Font 10";
+  };
 
   # Used by Thunar's "Open Terminal Here" action through exo-open.
   xdg.configFile."xfce4/helpers.rc".text = ''

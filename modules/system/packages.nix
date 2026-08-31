@@ -78,6 +78,8 @@
     gst_all_1.gst-libav
     gpu-screen-recorder-gtk
     kitty
+    libayatana-appindicator
+    libreoffice-stable
     lmstudio
     mpv
     nil
@@ -86,18 +88,16 @@
     obsidian
     pika-backup
     playerctl
-    protonup-qt
+    protonplus
     qbittorrent
     solaar
     spotify
     steam
     vlc
     xwayland-satellite
-    zed-editor
-    libayatana-appindicator
     unzip
-    xarchiver
+    zed-editor
     zip
-    protonplus
+    xarchiver
   ];
 }

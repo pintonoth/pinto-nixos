@@ -121,7 +121,7 @@ wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
     builtin_ids = [ "btop", "gtk3", "gtk4", "kitty", "qt", "umbriel" ]
-    community_ids = [ "zen-browser", "obsidian", "zed", "steam", "fastfetch", "yazi" ]
+    community_ids = [ "zen-browser", "obsidian", "zed", "steam", "fastfetch" ]
 
 [wallpaper.default]
 path = "/home/jensend/Pictures/wallhaven-e82xxr.jpg"

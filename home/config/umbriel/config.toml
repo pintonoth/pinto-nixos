@@ -15,8 +15,8 @@ files = [
 [general]
 autostart = [
     "noctalia",
-    "equibop",
     "steam",
+    "solaar"
 ]
 mod_key = "Super"
 xwayland = true

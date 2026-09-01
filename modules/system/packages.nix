@@ -81,7 +81,7 @@
     kitty
     libayatana-appindicator
     libreoffice-stable
-    lmstudio
+    # lmstudio
     mpv
     nil
     nixd

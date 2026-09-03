@@ -95,7 +95,7 @@
     spotify
     steam
     vlc
-    xwayland-satellite
+    inputs.xwayland-satellite.packages.${pkgs.system}.default
     unzip
     zed-editor
     zip

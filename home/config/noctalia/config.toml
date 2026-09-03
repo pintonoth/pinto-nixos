@@ -32,9 +32,8 @@ launcher_position = "start"
 pinned = [
     "thunar",
     "zen",
-    "equibop",
+    "discord",
     "spotify",
-    "com.pocoguy.Muse",
     "kitty",
     "dev.zed.Zed",
     "steam",

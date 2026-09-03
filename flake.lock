@@ -199,11 +199,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788363104,
-        "narHash": "sha256-ncso+QWDNtn5iB1ChObmJs4wbW7k4eyNmrA8LVHBZ5A=",
+        "lastModified": 1788404626,
+        "narHash": "sha256-aJjQhcVJTXyES4G0LrmmlnkGFOzt3CpMIg8JdUdKfWU=",
         "owner": "noctalia-dev",
         "repo": "noctalia",
-        "rev": "bc75f722fba9c7650870df1ebddf54bbbff519d9",
+        "rev": "a1a0e0ffc841af1f77901bc7ebc81c104ed8d56e",
         "type": "github"
       },
       "original": {
@@ -266,7 +266,29 @@
         "noctalia-greeter": "noctalia-greeter",
         "stylix": "stylix",
         "umbriel": "umbriel",
+        "xwayland-satellite": "xwayland-satellite",
         "zen-browser": "zen-browser"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "xwayland-satellite",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769222645,
+        "narHash": "sha256-gu6oZ86zLudBZMq8LL1qdtYt/S69GV5keQVXdvBrVSU=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "22da29e7f3d8cff75009cbbcf992c7cb66920cfd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "stylix": {
@@ -390,11 +412,11 @@
         "xdg-desktop-portal-umbriel": "xdg-desktop-portal-umbriel"
       },
       "locked": {
-        "lastModified": 1788364349,
-        "narHash": "sha256-Z+LQdv0Xi/PafrBCApK4NcKK58XMn58zj+BItiBQG68=",
+        "lastModified": 1788405257,
+        "narHash": "sha256-+1BOzUs90KhgQPS8dwPyn0CIAI++7WlrYRjhN3i9c0w=",
         "ref": "refs/heads/main",
-        "rev": "50add0917be77a91b03bf91f20e0ca827520c4a0",
-        "revCount": 758,
+        "rev": "8235b9e0cb97725bcaec9fe1757f5597c847b7e6",
+        "revCount": 763,
         "type": "git",
         "url": "https://github.com/noctalia-dev/umbriel"
       },
@@ -421,6 +443,28 @@
       "original": {
         "owner": "noctalia-dev",
         "repo": "xdg-desktop-portal-umbriel",
+        "type": "github"
+      }
+    },
+    "xwayland-satellite": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1771195969,
+        "narHash": "sha256-BUE41HjLIGPjq3U8VXPjf8asH8GaMI7FYdgrIHKFMXA=",
+        "owner": "Supreeeme",
+        "repo": "xwayland-satellite",
+        "rev": "536bd32efc935bf876d6de385ec18a1b715c9358",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Supreeeme",
+        "ref": "v0.8.1",
+        "repo": "xwayland-satellite",
         "type": "github"
       }
     },

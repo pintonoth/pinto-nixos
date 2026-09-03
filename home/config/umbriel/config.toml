@@ -16,7 +16,8 @@ files = [
 autostart = [
     "noctalia",
     "steam",
-    "solaar"
+    "solaar",
+    "discord"
 ]
 mod_key = "Super"
 xwayland = true
@@ -79,7 +80,7 @@ hide_when_typing = false
 hide_timeout_ms = 0
 
 [input.focus]
-follows_mouse = false
+follows_mouse = true
 
 [[layer_rule]]
 match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"

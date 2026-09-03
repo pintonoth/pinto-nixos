@@ -28,6 +28,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    xwayland-satellite = {
+      url = "github:Supreeeme/xwayland-satellite/v0.8.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

@@ -80,7 +80,7 @@ hide_when_typing = false
 hide_timeout_ms = 0
 
 [input.focus]
-follows_mouse = true
+follows_mouse = false
 
 [[layer_rule]]
 match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"

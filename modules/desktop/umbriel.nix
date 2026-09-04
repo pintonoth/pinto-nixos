@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
 {
-  programs.umbriel.enable = true;
+  programs.umbriel = {
+    enable = true;
+    package = pkgs.umbriel;
+  };
 
   programs.noctalia = {
     enable = true;

@@ -43,15 +43,15 @@
 
     defaultApplications = {
       "inode/directory" = [ "Thunar.desktop" ];
-      "text/html" = [ "zen.desktop" ];
+      "text/html" = [ "chromium-browser.desktop" ];
       "x-scheme-handler/heroic" = [
         "com.heroicgameslauncher.hgl.desktop"
       ];
 
-      "x-scheme-handler/http" = [ "zen.desktop" ];
-      "x-scheme-handler/https" = [ "zen.desktop" ];
+      "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
       "x-scheme-handler/mailto" = [
-        "zen.desktop"
+        "chromium-browser.desktop"
       ];
 
       "x-scheme-handler/lmstudio" = [

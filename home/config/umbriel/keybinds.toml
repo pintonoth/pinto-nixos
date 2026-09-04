@@ -1,7 +1,7 @@
 [keybinds]
 "Mod+T" = "spawn:kitty"
 "Mod+E" = "spawn:thunar"
-"Mod+B" = "spawn:zen"
+"Mod+B" = "spawn:chromium"
 "Mod+Z" = "spawn:zeditor"
 "Mod+Return" = "spawn:noctalia msg panel-toggle launcher"
 "Mod+O" = "overview-toggle"

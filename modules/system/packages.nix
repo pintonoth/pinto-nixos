@@ -21,6 +21,13 @@
     dedicatedServer.openFirewall = true;
   };
   programs.solaar.enable = true;
+  programs.chromium = {
+    enable = true;
+    extensions = [
+      "nngceckbapebfimnlniiiahkandclblb" #bitwarden
+      "ddkjiahejlhfcafbddmgiahcphecmpfh" #ublokc
+    ];
+  };
   hardware.logitech.wireless.enable = true;
   services.nordvpn.enable = true;
   # Flatpak configurations
@@ -63,7 +70,14 @@
   };
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+    (chromium.override {
+      enableWideVine = true;
+      commandLineArgs = [
+        "--enable-features=AcceleratedVideoEncoder"
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+      ];
+    })
     btop
     discord
     equibop
@@ -95,7 +109,7 @@
     spotify
     steam
     vlc
-    inputs.xwayland-satellite.packages.${pkgs.system}.default
+    xwayland-satellite
     unzip
     zapzap
     zed-editor

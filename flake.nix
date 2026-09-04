@@ -24,10 +24,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     xwayland-satellite = {
       url = "github:Supreeeme/xwayland-satellite/v0.8.1";
       inputs.nixpkgs.follows = "nixpkgs";

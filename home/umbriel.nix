@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -7,6 +7,7 @@
 
   programs.umbriel = {
     enable = true;
+    package = pkgs.umbriel;
     settings = ./config/umbriel/config.toml;
   };
 

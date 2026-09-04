@@ -16,7 +16,9 @@
     LC_TELEPHONE = "vi_VN";
     LC_TIME = "vi_VN";
   };
-
+  environment.sessionVariables = {
+    TZ = "Asia/Ho_Chi_Minh";
+  };
   # Vietnamese input method (Fcitx5 + Unikey)
   i18n.inputMethod = {
     enable = true;

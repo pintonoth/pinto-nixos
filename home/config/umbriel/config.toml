@@ -9,7 +9,7 @@ files = [
     "outputs.toml",
     "appearance.toml",
     "layout.toml",
-    "noctalia.toml"
+    "noctalia.toml",
 ]
 
 [general]

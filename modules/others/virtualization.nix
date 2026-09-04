@@ -24,7 +24,7 @@
   programs.virt-manager.enable = true;
 
   environment.systemPackages = with pkgs; [
-    (qemu_full.override { cephSupport = false; })
+    # (qemu_full.override { cephSupport = false; })
     virglrenderer
     virt-viewer
     virtio-win

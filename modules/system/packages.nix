@@ -24,30 +24,30 @@
   hardware.logitech.wireless.enable = true;
   services.nordvpn.enable = true;
   # Flatpak configurations
-  services.flatpak = {
-    enable = true;
-    update.auto = {
-      enable = true;
-      onCalendar = "weekly";
-    };
-    remotes = [
-      {
-        name = "flathub";
-        location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
-      }
-      {
-        name = "mixtapes";
-        location = "https://m-obeid.github.io/Mixtapes/mixtapes.flatpakrepo";
-      }
-    ];
+  # services.flatpak = {
+  #   enable = true;
+  #   update.auto = {
+  #     enable = true;
+  #     onCalendar = "weekly";
+  #   };
+  #   remotes = [
+  #     {
+  #       name = "flathub";
+  #       location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+  #     }
+  #     {
+  #       name = "mixtapes";
+  #       location = "https://m-obeid.github.io/Mixtapes/mixtapes.flatpakrepo";
+  #     }
+  #   ];
 
-    packages = [
-      {
-        appId = "com.pocoguy.Muse";
-        origin = "mixtapes";
-      }
-    ];
-  };
+  #   packages = [
+  #     {
+  #       appId = "com.pocoguy.Muse";
+  #       origin = "mixtapes";
+  #     }
+  #   ];
+  # };
 
   fonts.packages = with pkgs; [
     inter
@@ -97,6 +97,7 @@
     vlc
     inputs.xwayland-satellite.packages.${pkgs.system}.default
     unzip
+    zapzap
     zed-editor
     zip
     xarchiver

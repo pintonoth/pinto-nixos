@@ -1,9 +1,9 @@
 [keybinds]
-"Mod+Return" = "spawn:kitty"
+"Mod+T" = "spawn:kitty"
 "Mod+E" = "spawn:thunar"
 "Mod+B" = "spawn:zen"
 "Mod+Z" = "spawn:zeditor"
-"Mod" = "spawn:noctalia msg panel-toggle launcher"
+"Mod+Return" = "spawn:noctalia msg panel-toggle launcher"
 "Mod+O" = "overview-toggle"
 "Alt+Tab" = { action = "spawn:noctalia msg window-switcher", repeat = false }
 "Mod+Shift+S" = "spawn:noctalia msg screenshot-region"
@@ -24,10 +24,10 @@
 "Mod+M" = "window-modify-width:+0.2"
 "Mod+R" = "window-cycle-width"
 
-# "Mod+Shift+Space" = "window-move-to-scratchpad"
-# "Mod+Space" = "scratchpad-toggle"
-# "Mod+Ctrl+Space" = "window-restore-from-scratchpad"
-# "Mod+Tab" = "scratchpad-focus-next"
+"Mod+Shift+Space" = "window-move-to-scratchpad"
+"Mod+Space" = "scratchpad-toggle"
+"Mod+Ctrl+Space" = "window-restore-from-scratchpad"
+"Mod+Tab" = "scratchpad-focus-next"
 
 "Mod+1" = "workspace-switch:1"
 "Mod+2" = "workspace-switch:2"

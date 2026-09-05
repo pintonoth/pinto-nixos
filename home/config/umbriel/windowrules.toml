@@ -15,7 +15,8 @@ match.title = "File Operation Progress"
 default_floating = true
 default_size = [300, 100]
 
-#Steam games
+### Steam
+# Games
 [[window_rule]]
 match.app_id = "^steam_app.*?$"
 default_floating = true
@@ -24,10 +25,17 @@ default_focused = true
 default_position = { x = 0, y = 0 }
 default_workspace = 3
 
+# settings
+[[window_rule]]
+match.app_id = "^steam$"
+match.title = "Steam Settings"
+default_floating = true
+default_size = [800, 600]
+
 # Steam notification toasts
 [[window_rule]]
 match.title = "^notificationtoasts_.+_desktop"
-default_position = { x = 0, y = 0, anchor = "bottom_right" }
+default_position = { x = 7, y = 7, anchor = "bottom_right" }
 default_focused = false
 default_pinned = true
 

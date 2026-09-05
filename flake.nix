@@ -32,49 +32,23 @@
 
   outputs =
     { nixpkgs, ... }@inputs:
+    let
+      mkSystem = profile:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            profile
+            ./hardware-configuration.nix
+          ];
+        };
+    in
     {
       nixosConfigurations = {
-        pinto-nixos-kde = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/kde/configuration.nix
-            ./hardware-configuration.nix
-          ];
-        };
-
-        pinto-nixos-niri = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/niri/configuration.nix
-            ./hardware-configuration.nix
-            inputs.noctalia.nixosModules.default
-            inputs.noctalia-greeter.nixosModules.default
-          ];
-        };
-
-        pinto-nixos-umbriel = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/umbriel/configuration.nix
-            ./hardware-configuration.nix
-            inputs.noctalia.nixosModules.default
-            inputs.noctalia-greeter.nixosModules.default
-            inputs.umbriel.nixosModules.default
-          ];
-        };
-
-        pinto-nixos-cosmic = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/cosmic/configuration.nix
-            ./hardware-configuration.nix
-            inputs.home-manager.nixosModules.default
-          ];
-        };
+        pinto-nixos-kde = mkSystem ./desktops/kde/nixos.nix;
+        pinto-nixos-niri = mkSystem ./desktops/niri/nixos.nix;
+        pinto-nixos-umbriel = mkSystem ./desktops/umbriel/nixos.nix;
+        pinto-nixos-cosmic = mkSystem ./desktops/cosmic/nixos.nix;
       };
     };
 }

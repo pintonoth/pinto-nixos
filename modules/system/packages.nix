@@ -1,8 +1,4 @@
-{
-  inputs,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   # Allow unfree packages
@@ -15,11 +11,6 @@
   programs.bash = {
     enable = true;
   };
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = false;
-    dedicatedServer.openFirewall = true;
-  };
   programs.solaar.enable = true;
   programs.chromium = {
     enable = true;
@@ -29,7 +20,6 @@
     ];
   };
   hardware.logitech.wireless.enable = true;
-  services.nordvpn.enable = true;
   # Flatpak configurations
   # services.flatpak = {
   #   enable = true;
@@ -56,18 +46,6 @@
   #   ];
   # };
 
-  fonts.packages = with pkgs; [
-    inter
-    noto-fonts
-    nerd-fonts.jetbrains-mono
-    noto-fonts-color-emoji
-  ];
-  fonts.fontconfig.defaultFonts = {
-    sansSerif = [ "JetBrainsMono Nerd Font" ];
-    serif = [ "JetBrainsMono Nerd Font" ];
-    monospace = [ "JetBrainsMono Nerd Font" ];
-    emoji = [ "Noto Color Emoji" ];
-  };
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
     (chromium.override {
@@ -82,7 +60,6 @@
     discord
     equibop
     fastfetch
-    faugus-launcher
     ffmpeg
     git
     gst_all_1.gstreamer
@@ -92,6 +69,7 @@
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     gpu-screen-recorder-gtk
+    heroic
     kitty
     libayatana-appindicator
     libreoffice-stable

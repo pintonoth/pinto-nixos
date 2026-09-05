@@ -37,7 +37,8 @@ pinned = [
     "kitty",
     "dev.zed.Zed",
     "steam",
-    "io.github.Faugus.faugus-launcher"
+    "io.github.Faugus.faugus-launcher",
+    "zapzap"
 ]
 radius = 7
 radius_bottom_left = 0

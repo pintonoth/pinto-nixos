@@ -8,6 +8,12 @@ match.app_id = "^dev.noctalia.UmbrielSharePicker$"
 default_floating = true
 default_size = [800, 600]
 
+#Startup rules
+[[window_rule]]
+match.app_id = "^(Spotify|discord|steam|heroic)$"
+match.at_startup = true
+default_focused = false
+
 #Thunar
 [[window_rule]]
 match.app_id = "thunar"
@@ -30,7 +36,6 @@ default_workspace = 3
 match.app_id = "^steam$"
 match.title = "Steam Settings"
 default_floating = true
-default_size = [800, 600]
 
 # Steam notification toasts
 [[window_rule]]

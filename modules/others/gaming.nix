@@ -1,6 +1,12 @@
 { ... }:
 
 {
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = false;
+    dedicatedServer.openFirewall = true;
+  };
+
   # Gaming Performance Tweaks (Gamemode)
   # Optimizes CPU governors, process priorities, and GPU clocks when running games
   programs.gamemode.enable = true;

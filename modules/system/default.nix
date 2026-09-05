@@ -8,6 +8,19 @@
     ./audio.nix
   ];
 
+  fonts.packages = with pkgs; [
+    inter
+    noto-fonts
+    nerd-fonts.jetbrains-mono
+    noto-fonts-color-emoji
+  ];
+  fonts.fontconfig.defaultFonts = {
+    sansSerif = [ "JetBrainsMono Nerd Font" ];
+    serif = [ "JetBrainsMono Nerd Font" ];
+    monospace = [ "JetBrainsMono Nerd Font" ];
+    emoji = [ "Noto Color Emoji" ];
+  };
+
   stylix = {
     enable = true;
     autoEnable = false;
@@ -23,9 +36,9 @@
 
     icons = {
       enable = true;
-      package = pkgs.papirus-icon-theme;
-      light = "Papirus-Light";
-      dark = "Papirus-Dark";
+      package = pkgs.colloid-icon-theme;
+      light = "Colloid-Light";
+      dark = "Colloid-Dark";
     };
 
     fonts = {

@@ -25,15 +25,12 @@ in
     enable = true;
     package = pkgs.umbriel;
     settings = ../../home/config/umbriel/config.toml;
-    validateConfig = true;
   };
 
   xdg.configFile = {
-    # Replace the upstream single-file validator with one that sees the includes.
+    # Provide build-time validation independently of the upstream module.
     # Install only config.toml; the runtime theme must remain writable by Noctalia.
-    "umbriel/config.toml".source = lib.mkIf config.programs.umbriel.validateConfig (
-      lib.mkForce validatedConfig
-    );
+    "umbriel/config.toml".source = lib.mkForce validatedConfig;
     "umbriel/keybinds.toml".source = ../../home/config/umbriel/keybinds.toml;
     "umbriel/outputs.toml".source = ../../home/config/umbriel/outputs.toml;
     "umbriel/windowrules.toml".source = ../../home/config/umbriel/windowrules.toml;

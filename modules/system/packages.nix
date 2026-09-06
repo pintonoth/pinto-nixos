@@ -1,8 +1,14 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.overlays = [
+    (import ../../overlays { inherit inputs; })
+  ];
+
+  programs.dconf.enable = true;
 
   # Core applications
   # programs.firefox.enable = true;

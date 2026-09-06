@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../hosts/common.nix
+    ../../configuration.nix
   ];
 
   services.displayManager.cosmic-greeter.enable = true;

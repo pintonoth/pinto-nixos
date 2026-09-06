@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../hosts/common.nix
+    ../../configuration.nix
     ../../modules/desktop/noctalia.nix
     ../../modules/desktop/xdg-portal.nix
   ];

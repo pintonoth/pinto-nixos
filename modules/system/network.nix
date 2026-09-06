@@ -1,6 +1,10 @@
 { ... }:
 
 {
+  # Networking options
+  networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
+
   services.openssh.enable = true;
   services.nordvpn.enable = true;
 

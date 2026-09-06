@@ -1,7 +1,7 @@
 { ... }:
 {
   imports = [
-    ../../hosts/common.nix
+    ../../configuration.nix
   ];
 
   home-manager.users.jensend = import ./home.nix;

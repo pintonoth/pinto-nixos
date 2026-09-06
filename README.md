@@ -43,14 +43,14 @@ nixos-rebuild ... .#pinto-nixos-umbriel
 flake.nix
 ├── hardware-configuration.nix
 └── desktops/umbriel/nixos.nix
-    ├── hosts/common.nix
+    ├── configuration.nix
     │   ├── Home Manager, Stylix, and Flatpak modules
-    │   ├── overlays/default.nix
-    │   ├── modules/default.nix
-    │   │   ├── modules/system/*
-    │   │   └── modules/others/*
-    │   └── home/desktop-common.nix
-    │       └── home/kitty.nix
+    │   └── modules/default.nix
+    │       ├── modules/system/default.nix
+    │       │   ├── packages.nix → overlays/default.nix
+    │       │   ├── users.nix → home/desktop-common.nix → home/kitty.nix
+    │       │   └── boot, locale, network, drives, and audio modules
+    │       └── modules/others/*
     │
     ├── modules/desktop/noctalia.nix
     │   ├── upstream Noctalia NixOS module
@@ -68,7 +68,7 @@ flake.nix
 ```
 
 Each `desktops/<name>/nixos.nix` is a system entry point that imports the common
-host configuration, its desktop dependencies, and its adjacent Home Manager
+root `configuration.nix`, its desktop dependencies, and its adjacent Home Manager
 module where needed. COSMIC uses only the shared Home Manager configuration.
 The `modules/` directory contains shared system configuration, while `home/`
 contains shared Home Manager modules and raw configuration files deployed under
@@ -76,6 +76,14 @@ contains shared Home Manager modules and raw configuration files deployed under
 desktop's Home Manager module are merged for the `jensend` user. The flake's
 `mkSystem` helper combines each desktop entry point with this machine's hardware
 configuration.
+
+The root `configuration.nix` connects external modules to the shared system
+modules and sets `system.stateVersion`. Shared settings live in modules grouped
+by responsibility: boot and kernel in `boot.nix`, account and Home Manager
+integration in `users.nix`, networking in `network.nix`, package overlays and
+program settings in `packages.nix`, and Nix settings in `maintenance.nix`.
+The user module explicitly keeps its account packages before Home Manager's
+package environment to preserve the original package order after the split.
 
 The shared Home Manager configuration uses the system package set through
 `useGlobalPkgs` and installs user packages through `useUserPackages`. KDE adds
@@ -93,12 +101,11 @@ validator on the same package.
 pinto-nixos/
 ├── flake.nix                       # Inputs and NixOS configuration outputs
 ├── flake.lock                      # Locked dependency revisions
+├── configuration.nix               # External/shared module imports and state version
 ├── hardware-configuration.nix      # Machine-specific hardware configuration
 ├── assets/
 │   └── wallpapers/
 │       └── wallhaven-e82xxr.jpg     # Bundled Noctalia wallpaper
-├── hosts/
-│   └── common.nix                  # Settings shared by the desktop outputs
 ├── desktops/
 │   ├── cosmic/
 │   │   └── nixos.nix              # COSMIC session and greeter
@@ -119,15 +126,17 @@ pinto-nixos/
 │   ├── system/
 │   │   ├── default.nix            # System imports, fonts, and Stylix theme
 │   │   ├── audio.nix              # PipeWire and RTKit
+│   │   ├── boot.nix               # Bootloader and kernel
 │   │   ├── drives.nix             # Additional machine-specific NTFS mounts
 │   │   ├── locale.nix             # Time zone, locales, and Fcitx5 input methods
-│   │   ├── network.nix            # SSH, NordVPN, DNS, and networking rules
-│   │   └── packages.nix           # Applications, program settings, Flatpak reference
+│   │   ├── network.nix            # Hostname, NetworkManager, SSH, NordVPN, and DNS
+│   │   ├── packages.nix           # Overlays, applications, dconf, Flatpak reference
+│   │   └── users.nix              # User account and Home Manager integration
 │   └── others/
 │       ├── default.nix            # Imports the modules below
 │       ├── file-manager.nix       # Thunar and file-management services
 │       ├── gaming.nix             # Steam, GameMode, and graphics support
-│       ├── maintenance.nix        # Garbage collection, store optimization, fwupd
+│       ├── maintenance.nix        # Nix settings, garbage collection, fwupd
 │       └── virtualization.nix     # Libvirt, QEMU, virt-manager, and related packages
 ├── overlays/
 │   └── default.nix                # Umbriel and Xwayland Satellite package selection
@@ -225,15 +234,17 @@ the running desktop. KDE and COSMIC do not use this Noctalia wallpaper setup.
 | Desktop portal defaults | `modules/desktop/xdg-portal.nix` |
 | System packages | `modules/system/packages.nix` |
 | Steam, GameMode, or gaming graphics | `modules/others/gaming.nix` |
-| VPN service, DNS, or networking rules | `modules/system/network.nix` |
+| Hostname, NetworkManager, VPN, DNS, or networking rules | `modules/system/network.nix` |
 | Additional storage mounts | `modules/system/drives.nix` |
 | File-manager services | `modules/others/file-manager.nix` |
 | Virtual machines | `modules/others/virtualization.nix` |
-| Garbage collection or firmware updates | `modules/others/maintenance.nix` |
+| Nix settings, garbage collection, or firmware updates | `modules/others/maintenance.nix` |
 | Locale, input method, or printing | `modules/system/locale.nix` |
 | Kitty settings | `home/config/kitty/kitty.conf` |
 | Shared Home Manager settings | `home/desktop-common.nix` |
-| Boot, hostname, user, or kernel | `hosts/common.nix` |
+| Bootloader or kernel | `modules/system/boot.nix` |
+| User account or Home Manager integration | `modules/system/users.nix` |
+| Shared module imports or system state version | `configuration.nix` |
 | Umbriel or Xwayland Satellite package overrides | `overlays/default.nix` |
 
 ## Checking changes

@@ -1,6 +1,12 @@
 { ... }:
 
 {
+  # Experimental features enabled for future flake readiness
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+
   # Automated Garbage Collection
   nix.gc = {
     automatic = true;

@@ -1,6 +1,8 @@
 { pkgs, ... }:
 {
   imports = [
+    ./boot.nix
+    ./users.nix
     ./locale.nix
     ./network.nix
     ./packages.nix

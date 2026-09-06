@@ -19,7 +19,7 @@ style = "fade"        # "fade" or "slide"
 [animation.windows_move]
 enabled = true
 duration_ms = 250
-curve = "snappy"
+curve = "snappy"      # linear, ease, easeout, snappy, bounce, or elastic
 
 [animation.workspaces]
 enabled = true

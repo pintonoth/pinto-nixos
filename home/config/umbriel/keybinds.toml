@@ -1,4 +1,5 @@
 [keybinds]
+#apps
 "Mod+T" = "spawn:kitty"
 "Mod+E" = "spawn:thunar"
 "Mod+B" = "spawn:chromium"
@@ -9,14 +10,15 @@
 "Mod+Shift+S" = "spawn:noctalia msg screenshot-region"
 "Mod+Shift+P" = "spawn:noctalia msg screenshot-fullscreen"
 
-"Mod+V" = "window-toggle-floating"
-"Mod+K" = "window-toggle-pinned"
-"Mod+F" = "window-toggle-maximize"
-"Mod+Q" = "window-close"
-"Mod+Left" = "window-focus-left"
-"Mod+Right" = "window-focus-right"
-"Mod+Up" = "window-focus-up"
-"Mod+Down" = "window-focus-down"
+#window
+"Mod+V"           = "window-toggle-floating"
+"Mod+K"           = "window-toggle-pinned"
+"Mod+F"           = "window-toggle-maximize"
+"Mod+Q"           = "window-close"
+"Mod+Left"        = "window-focus-left"
+"Mod+Right"       = "window-focus-right"
+"Mod+Up"          = "window-focus-up"
+"Mod+Down"        = "window-focus-down"
 
 "Mod+Ctrl+Left" = "column-move-left"
 "Mod+Ctrl+Right" = "column-move-right"
@@ -27,10 +29,17 @@
 "Mod+M" = "window-modify-width:+0.2"
 "Mod+R" = "window-cycle-width"
 
+#Scratchpad
 "Mod+Shift+Space" = "window-move-to-scratchpad"
 "Mod+Space" = "scratchpad-toggle"
 "Mod+Ctrl+Space" = "window-restore-from-scratchpad"
 "Mod+Tab" = "scratchpad-focus-next"
+
+#workspace
+"Mod+MouseMiddle" = "layout-scroll-drag"
+"Mod+Shift+Tab"   = "workspace-set-layout:toggle"
+"Mod+WheelUp"     = "workspace-previous"
+"Mod+WheelDown"   = "workspace-next"
 
 "Mod+1" = "workspace-switch:1"
 "Mod+2" = "workspace-switch:2"

@@ -23,6 +23,8 @@
     extensions = [
       "nngceckbapebfimnlniiiahkandclblb" # bitwarden
       "ddkjiahejlhfcafbddmgiahcphecmpfh" # ublokc
+      "eimadpbcbfnmbkopoojfekhnkhdbieeh" # dark reader
+      "jdpblpklojajpopllbckephjndibljbc" # twitch auto clicker
     ];
   };
   hardware.logitech.wireless.enable = true;
@@ -67,6 +69,7 @@
     equibop
     fastfetch
     ffmpeg
+    fragments
     git
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -85,10 +88,10 @@
     nixd
     nordvpn
     obsidian
+    opencode-desktop
     pika-backup
     playerctl
     protonplus
-    qbittorrent
     spotify
     vlc
     xwayland-satellite

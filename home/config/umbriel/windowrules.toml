@@ -3,6 +3,15 @@
 opacity = 0.9
 blur = true
 
+#Active/Inactive windows opacity
+[[window_rule]]
+match.is_focused = false
+opacity = 0.8
+
+[[window_rule]]
+match.is_focused = true
+opacity = 0.9
+
 # Keep Kitty's own background transparency without fading its text.
 [[window_rule]]
 match.app_id = "^kitty$"
@@ -46,7 +55,7 @@ default_size = [300, 100]
 ### Steam
 # Games
 [[window_rule]]
-match.app_id = "^steam_app.*?$"
+match.app_id = "^steam_app_.*$"
 opacity = 1.0
 blur = false
 default_floating = true
@@ -78,15 +87,6 @@ default_size = [ 480, 270 ]
 default_pinned = true
 default_focused = false
 default_position = { x = 8, y = 8, anchor = "top_right" }
-
-#Active/Inactive windows opacity
-[[window_rule]]
-match.is_focused = false
-opacity = 0.8
-
-[[window_rule]]
-match.is_focused = true
-opacity = 0.9
 
 #workspace-2 apps
 [[window_rule]]

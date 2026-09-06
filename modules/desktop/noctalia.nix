@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ config, inputs, ... }:
 {
   imports = [
     inputs.noctalia.nixosModules.default
@@ -16,9 +16,9 @@
 
     settings = {
       cursor = {
-        theme = "Bibata-Modern-Ice";
-        size = 24;
-        path = "${pkgs.bibata-cursors}/share/icons";
+        theme = config.stylix.cursor.name;
+        size = config.stylix.cursor.size;
+        path = "${config.stylix.cursor.package}/share/icons";
       };
 
       idle.timeout = 300;

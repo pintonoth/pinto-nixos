@@ -124,13 +124,13 @@ wallpaper_scheme = "dysfunctional"
     community_ids = [ "obsidian", "zed", "steam", "fastfetch" ]
 
 [wallpaper.default]
-path = "/home/jensend/Pictures/wallhaven-e82xxr.jpg"
+path = "@wallpaper@"
 
 [wallpaper.last]
-path = "/home/jensend/Pictures/wallhaven-e82xxr.jpg"
+path = "@wallpaper@"
 
 [wallpaper.monitors.HDMI-A-1]
-path = "/home/jensend/Pictures/wallhaven-e82xxr.jpg"
+path = "@wallpaper@"
 
 [widget.active_window]
 display = "text_only"

@@ -15,6 +15,9 @@
 "Mod+Q" = "window-close"
 "Mod+Left" = "window-focus-left"
 "Mod+Right" = "window-focus-right"
+"Mod+Up" = "window-focus-up"
+"Mod+Down" = "window-focus-down"
+
 "Mod+Ctrl+Left" = "column-move-left"
 "Mod+Ctrl+Right" = "column-move-right"
 #Scrolling only

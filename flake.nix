@@ -31,9 +31,10 @@
   };
 
   outputs =
-    { nixpkgs, ... }@inputs:
+    { self, nixpkgs, ... }@inputs:
     let
-      mkSystem = profile:
+      mkSystem =
+        profile:
         nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
@@ -44,6 +45,11 @@
         };
     in
     {
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+
+      checks.x86_64-linux.umbriel-config =
+        self.nixosConfigurations.pinto-nixos-umbriel.config.home-manager.users.jensend.xdg.configFile."umbriel/config.toml".source;
+
       nixosConfigurations = {
         pinto-nixos-kde = mkSystem ./desktops/kde/nixos.nix;
         pinto-nixos-niri = mkSystem ./desktops/niri/nixos.nix;

@@ -16,6 +16,8 @@ files = [
 autostart = [
     "noctalia",
     "steam",
+    "spotify",
+    "steam",
     "solaar",
     "discord"
 ]

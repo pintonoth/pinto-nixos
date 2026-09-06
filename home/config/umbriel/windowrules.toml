@@ -1,3 +1,31 @@
+# Default transparency and blur for regular windows.
+[[window_rule]]
+opacity = 0.9
+blur = true
+
+# Keep Kitty's own background transparency without fading its text.
+[[window_rule]]
+match.app_id = "^kitty$"
+opacity = 1.0
+
+# Keep games and video surfaces opaque when applications advertise their type.
+[[window_rule]]
+match.content_type = "game"
+opacity = 1.0
+blur = false
+
+[[window_rule]]
+match.content_type = "video"
+opacity = 1.0
+blur = false
+
+# Also cover the installed video players when no content type is advertised.
+[[window_rule]]
+match.app_id = "^(mpv|vlc|org[.]videolan[.]VLC)$"
+opacity = 1.0
+blur = false
+
+#Portals and settings
 [[window_rule]]
 match.app_id = "^(dev.noctalia.Noctalia|xdg-desktop-portal-gtk)$"
 default_floating = true
@@ -7,12 +35,6 @@ default_size = [1020, 900]
 match.app_id = "^dev.noctalia.UmbrielSharePicker$"
 default_floating = true
 default_size = [800, 600]
-
-#Startup rules
-[[window_rule]]
-match.app_id = "^(Spotify|discord|steam|heroic)$"
-match.at_startup = true
-default_focused = false
 
 #Thunar
 [[window_rule]]
@@ -25,6 +47,8 @@ default_size = [300, 100]
 # Games
 [[window_rule]]
 match.app_id = "^steam_app.*?$"
+opacity = 1.0
+blur = false
 default_floating = true
 default_size = [1280, 720]
 default_focused = true
@@ -40,18 +64,15 @@ default_floating = true
 # Steam notification toasts
 [[window_rule]]
 match.title = "^notificationtoasts_.+_desktop"
-default_position = { x = 7, y = 7, anchor = "bottom_right" }
+default_position = { x = 0, y = 0, anchor = "bottom_right" }
 default_focused = false
 default_pinned = true
 
-#kitty
-[[window_rule]]
-match.app_id = "^kitty$"
-blur = true
-
 #Picture in Picture window_rule
 [[window_rule]]
-match.title = "^(?:Picture[_-]in[_-]Picture|.+['’]s Stream)$"
+match.title = "^(?:Picture[_-]in[_-]?:Picture|.+['’]s Stream)$"
+opacity = 1.0
+blur = false
 default_floating = true
 default_size = [ 480, 270 ]
 default_pinned = true
@@ -61,25 +82,30 @@ default_position = { x = 8, y = 8, anchor = "top_right" }
 #Active/Inactive windows opacity
 [[window_rule]]
 match.is_focused = false
-opacity = 0.95
+opacity = 0.7
 
 [[window_rule]]
 match.is_focused = true
-opacity = 1.0
+opacity = 0.9
 
 #workspace-2 apps
 [[window_rule]]
 match.app_id = "^(equibop|discord|Spotify|com.pocoguy.Muse)$"
-default_focused = false
 default_workspace = 2
 
 #workspace-3 apps
 [[window_rule]]
 match.app_id = "^(heroic|steam|io.github.Faugus.faugus-launcher)$"
-default_focused = false
 default_workspace = 3
 
 #workspace-5 apps
 [[window_rule]]
 match.app_id = "^dev.zed.Zed$"
 default_workspace = 5
+
+#Startup rules
+[[window_rule]]
+match.app_id = "^(discord|Spotify|solaar|steam)$"
+default_focused = false
+match.at_startup = true
+focus_on_activate = false

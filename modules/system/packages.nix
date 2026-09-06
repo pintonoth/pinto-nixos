@@ -15,8 +15,8 @@
   programs.chromium = {
     enable = true;
     extensions = [
-      "nngceckbapebfimnlniiiahkandclblb" #bitwarden
-      "ddkjiahejlhfcafbddmgiahcphecmpfh" #ublokc
+      "nngceckbapebfimnlniiiahkandclblb" # bitwarden
+      "ddkjiahejlhfcafbddmgiahcphecmpfh" # ublokc
     ];
   };
   hardware.logitech.wireless.enable = true;
@@ -83,9 +83,7 @@
     playerctl
     protonplus
     qbittorrent
-    solaar
     spotify
-    steam
     vlc
     xwayland-satellite
     unzip

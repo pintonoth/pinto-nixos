@@ -13,8 +13,7 @@
     glib
   ];
 
-  home.sessionVariables.GSETTINGS_SCHEMA_DIR =
-    pkgs.glib.getSchemaPath pkgs.gsettings-desktop-schemas;
+  home.sessionVariables.GSETTINGS_SCHEMA_DIR = pkgs.glib.getSchemaPath pkgs.gsettings-desktop-schemas;
 
   programs.bash = {
     enable = true;

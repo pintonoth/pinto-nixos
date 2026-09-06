@@ -61,7 +61,8 @@ flake.nix
     │
     └── desktops/umbriel/home.nix
         ├── home/noctalia.nix
-        │   └── home/config/noctalia/config.toml
+        │   ├── home/config/noctalia/config.toml
+        │   └── assets/wallpapers/wallhaven-e82xxr.jpg
         │
         └── home/config/umbriel/*
 ```
@@ -93,6 +94,9 @@ pinto-nixos/
 ├── flake.nix                       # Inputs and NixOS configuration outputs
 ├── flake.lock                      # Locked dependency revisions
 ├── hardware-configuration.nix      # Machine-specific hardware configuration
+├── assets/
+│   └── wallpapers/
+│       └── wallhaven-e82xxr.jpg     # Bundled Noctalia wallpaper
 ├── hosts/
 │   └── common.nix                  # Settings shared by the desktop outputs
 ├── desktops/
@@ -152,8 +156,9 @@ module systems and perform different jobs:
 - `desktops/umbriel/home.nix` enables the upstream Umbriel Home Manager module
   so it can validate and deploy the user's main compositor configuration. It
   also deploys the supplemental TOML files.
-- `home/noctalia.nix` deploys `home/config/noctalia/config.toml` to
-  `~/.config/noctalia/config.toml` for both the Umbriel and Niri profiles.
+- `home/noctalia.nix` generates `~/.config/noctalia/config.toml` from the repository
+  TOML file for both the Umbriel and Niri profiles, substituting the bundled
+  wallpaper's Nix store path.
 - `home/config/umbriel/config.toml` contains the main compositor configuration.
 - `home/config/umbriel/keybinds.toml` contains keyboard shortcuts.
 - `home/config/umbriel/outputs.toml` contains monitor settings.
@@ -173,11 +178,34 @@ Home Manager activation as a writable file. That configuration includes
 `themes/noctalia.conf`. Edit the repository's Kitty configuration for persistent
 changes; activation installs it again.
 
-The shared greeter module defines the Bibata cursor and 300-second idle timeout.
+The shared greeter module reads the cursor theme, size, and package from Stylix
+in `modules/system/default.nix`, and defines the 300-second idle timeout.
 Umbriel selects the `umbriel` session with the `Synced` appearance scheme;
 Niri selects `niri` with Catppuccin dark appearance. Umbriel's upstream NixOS
 import has a small wrapper to preserve package-list ordering after the module
 reorganization.
+
+Window transparency and blur are configured in
+`home/config/umbriel/windowrules.toml`. The active/inactive rules set focused
+windows to full opacity and unfocused windows to 95% opacity. These rules appear
+after the general and application-specific rules, so their opacity values take
+precedence. Blur settings are controlled separately by the earlier rules.
+
+## Wallpaper
+
+`assets/wallpapers/wallhaven-e82xxr.jpg` is the wallpaper bundled with the
+Umbriel and Niri configurations. `home/noctalia.nix` replaces `@wallpaper@` in
+the Noctalia TOML template with the image's Nix store path for the default,
+last-used, and `HDMI-A-1` wallpaper settings. The image is included in the
+configuration's store dependencies; the original file in `~/Pictures/` is
+no longer required by this configuration.
+
+To change the bundled wallpaper, replace the repository image, or add a new
+image under `assets/wallpapers/` and update its reference in `home/noctalia.nix`.
+Keep the `@wallpaper@` placeholders in the TOML template and track any new image
+with Git. Build and activate the selected desktop output, then let Noctalia
+reload its configuration or start a new session. A build alone does not change
+the running desktop. KDE and COSMIC do not use this Noctalia wallpaper setup.
 
 ## Common changes
 
@@ -189,6 +217,7 @@ reorganization.
 | COSMIC session or greeter | `desktops/cosmic/nixos.nix` |
 | Shared Noctalia and greeter services | `modules/desktop/noctalia.nix` |
 | Noctalia panel settings | `home/config/noctalia/config.toml` |
+| Bundled wallpaper | `assets/wallpapers/wallhaven-e82xxr.jpg` and `home/noctalia.nix` |
 | Umbriel keybindings or layout | `home/config/umbriel/` |
 | Umbriel validation or file deployment | `desktops/umbriel/home.nix` |
 | Niri keybindings or layout | `home/config/niri/config.kdl` |
@@ -209,16 +238,46 @@ reorganization.
 
 ## Checking changes
 
+Format the repository's Nix files using the formatter pinned through nixpkgs:
+
+```bash
+nix fmt
+```
+
+For CI, format all Nix files and fail if any formatting changes were needed:
+
+```bash
+nix fmt -- --ci
+```
+
 Evaluate all four desktop outputs without building or updating the lock file:
 
 ```bash
 nix flake check --no-build --no-update-lock-file
 ```
 
-Add `--offline` when all locked inputs are already available locally. Evaluation
-checks module composition, options, and assertions; it does not run Umbriel's
-build-time configuration validator or test a live desktop session. Build the
-selected output before activating it, using the commands above.
+Run evaluation and the existing Umbriel configuration validator together:
+
+```bash
+nix flake check --no-update-lock-file
+```
+
+The `checks.x86_64-linux.umbriel-config` output reuses the same validator that
+Home Manager uses for the compositor configuration, including its supplemental
+TOML files and an empty runtime-theme placeholder. This builds the validation
+derivation and its dependencies, not the full system. To run only this check:
+
+```bash
+nix build --no-link --no-update-lock-file .#checks.x86_64-linux.umbriel-config
+```
+
+Successful validation results can be reused from the Nix store. Add `--rebuild`
+to the `nix build` command to rerun an already-built validator locally.
+
+Add `--offline` when all required inputs and build dependencies are available
+locally. The `--no-build` variant checks module composition, options, and
+assertions but skips running the validator. Neither check tests a live desktop
+session. Build the selected output before activating it, using the commands above.
 
 New files must be tracked by Git to be included in normal Git-backed flake
 evaluation. For a structural refactor, compare each output's system derivation
@@ -251,6 +310,7 @@ Review `flake.lock`, then build the Umbriel output before switching.
 
 - The system uses NixOS unstable.
 - The configured hostname is `nixos` and the main user is `jensend`.
+- Steam and Solaar are installed by their enabled NixOS modules. Steam's module supplies the package configured for the system's graphics and fonts; neither application needs an additional entry in `environment.systemPackages`.
 - Noctalia Greeter uses greetd for the Umbriel and Niri outputs, with the session selected by the desktop entry point.
 - The `nix-flatpak` input and module import are retained. The commented Flatpak configuration in `modules/system/packages.nix` is intentionally kept as a reference for future use; it currently enables no Flatpak service or app installation.
 - `hardware-configuration.nix` is specific to this machine and should be regenerated for different hardware.

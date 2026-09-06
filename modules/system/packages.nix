@@ -88,7 +88,7 @@
     nixd
     nordvpn
     obsidian
-    opencode-desktop
+    opencode
     pika-backup
     playerctl
     protonplus

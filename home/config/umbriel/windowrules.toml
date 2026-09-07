@@ -1,38 +1,20 @@
-# Default transparency and blur for regular windows.
-[[window_rule]]
-opacity = 0.9
-blur = true
-
 #Active/Inactive windows opacity
 [[window_rule]]
 match.is_focused = false
 opacity = 0.8
+blur = true
+blur_optimized = true
 
 [[window_rule]]
 match.is_focused = true
-opacity = 0.9
+opacity = 1.0
+blur = false
 
 # Keep Kitty's own background transparency without fading its text.
 [[window_rule]]
 match.app_id = "^kitty$"
 opacity = 1.0
-
-# Keep games and video surfaces opaque when applications advertise their type.
-[[window_rule]]
-match.content_type = "game"
-opacity = 1.0
-blur = false
-
-[[window_rule]]
-match.content_type = "video"
-opacity = 1.0
-blur = false
-
-# Also cover the installed video players when no content type is advertised.
-[[window_rule]]
-match.app_id = "^(mpv|vlc|org[.]videolan[.]VLC)$"
-opacity = 1.0
-blur = false
+blur = true
 
 #Portals and settings
 [[window_rule]]

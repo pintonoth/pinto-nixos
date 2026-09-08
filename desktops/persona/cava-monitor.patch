@@ -1,0 +1,11 @@
+--- a/cavamonitor.hpp
++++ b/cavamonitor.hpp
+@@ -47,7 +47,7 @@
+     explicit CavaProcessor(QObject* parent = nullptr);
+     ~CavaProcessor();
+ 
+-    void setBars(int bars);
++    Q_INVOKABLE void setBars(int bars);
+ 
+ signals:
+     void valuesChanged(QVector<double> values);

@@ -16,7 +16,7 @@ After reviewing the build result, activate it:
 sudo nixos-rebuild switch --flake .#pinto-nixos-umbriel
 ```
 
-The four outputs are alternative desktop configurations for the same
+The five outputs are alternative desktop configurations for the same
 `x86_64-linux` machine. Select one by its flake output name:
 
 | Setup | Flake output | System entry point | Greeter |
@@ -25,10 +25,81 @@ The four outputs are alternative desktop configurations for the same
 | Niri + Noctalia | `pinto-nixos-niri` | `desktops/niri/nixos.nix` | Noctalia Greeter |
 | KDE Plasma | `pinto-nixos-kde` | `desktops/kde/nixos.nix` | SDDM |
 | COSMIC | `pinto-nixos-cosmic` | `desktops/cosmic/nixos.nix` | COSMIC Greeter |
+| Hyprland + Persona | `pinto-nixos-persona` | `desktops/persona/nixos.nix` | Noctalia Greeter |
 
 All outputs share the hostname `nixos`, user `jensend`, hardware configuration,
 system modules, and common Home Manager settings. Selecting an output does not
 require changing the hostname or editing the flake.
+
+## Persona configuration
+
+The optional Persona profile runs Hyprland with the
+[Persona Quickshell theme](https://github.com/Yujonpradhananga/Persona-Quickshell).
+It includes the animated wallpaper, Cava visualizer, media widget, clock,
+calendar, application launcher, information panels, screen filters, and power
+menu. It uses Noctalia Greeter for login. Additional notification, locking,
+screenshot, and network/Bluetooth settings applications are not included in
+this profile.
+
+Build and validate before activating:
+
+```bash
+nix build --no-link .#checks.x86_64-linux.persona
+sudo nixos-rebuild build --flake .#pinto-nixos-persona
+```
+
+To activate the built configuration, then enter a fresh Hyprland session:
+
+```bash
+sudo nixos-rebuild switch --flake .#pinto-nixos-persona
+```
+
+Save your work before switching desktop profiles, because the display-manager
+change can end the current session. To return to the primary desktop, build
+and switch `.#pinto-nixos-umbriel` using the commands at the top of this file.
+The previous NixOS generation is also available from the boot menu.
+
+`desktops/persona/hyprland.lua` configures HDMI-A-1 at 3840×2160, 120 Hz,
+scale 2, with automatic configuration for other outputs. Shortcuts include
+Super+T for Kitty, Super+E for Thunar, Super+Space for the launcher, Super+Q
+to close a window, Super+V to toggle floating, Super+F to maximize, and
+Super+Shift+F for fullscreen. Super+arrow keys change focus;
+Super+Ctrl+arrows move windows. Super+1–9 changes workspace, and
+Super+Ctrl+1–9 moves a window there. Media keys control PipeWire/playerctl.
+Backlight shortcuts are enabled only when a supported backlight exists;
+HDMI brightness through DDC/CI is not configured.
+
+Persona's sources and Cava plugin are pinned through the flake. The package
+supplies missing fonts, rebuilds wallpaper shaders with the pinned Qt, and
+applies local compatibility fixes. The wrapper keeps the plugin and multimedia
+imports local to Persona. Home Manager also exposes the packaged configuration
+at `~/.config/quickshell/persona`; edit the tracked package/patches for lasting
+changes. Kitty uses a static Persona palette in this profile.
+
+Hyprland starts `persona-shell` once. Useful commands within that session:
+
+```bash
+persona-shell ipc call searchapp toggle
+persona-shell list
+persona-shell log
+```
+
+To restart after a shell failure, run `persona-shell`; the wrapper prevents
+duplicate instances of the same configuration. To build just the shell, use
+`nix build --no-link .#persona-shell`. The Persona revision is explicit in
+`flake.nix`: change that revision and run `nix flake lock` to update it. Update
+the Cava plugin separately with `nix flake update cava-monitor`, then rerun
+the checks and full profile build.
+
+The Persona check validates Hyprland's generated Lua configuration, packaged
+assets, QML startup, launcher IPC, keyboard application launching, and duplicate
+instance prevention in a headless Wayland session at 4K/scale 2. Its output
+contains logs and desktop/launcher screenshots. It does not test the physical
+display, greeter login, real audio playback, screen filters in Hyprland, or
+shutdown/reboot. Check those in a fresh Hyprland session; inspect
+`hyprctl configerrors` and `persona-shell log` if something fails. With no
+active MPRIS player the media widget displays its idle state; Cava requires a
+running PipeWire session and audio output.
 
 ## Configuration flow
 
@@ -261,7 +332,7 @@ For CI, format all Nix files and fail if any formatting changes were needed:
 nix fmt -- --ci
 ```
 
-Evaluate all four desktop outputs without building or updating the lock file:
+Evaluate all five desktop outputs without building or updating the lock file:
 
 ```bash
 nix flake check --no-build --no-update-lock-file

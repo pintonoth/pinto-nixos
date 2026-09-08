@@ -89,6 +89,7 @@
     nordvpn
     obsidian
     opencode
+    obs-studio
     pika-backup
     playerctl
     protonplus

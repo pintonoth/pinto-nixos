@@ -30,9 +30,9 @@ default_size = [800, 600]
 #Thunar
 [[window_rule]]
 match.app_id = "thunar"
-match.title = "File Operation Progress"
+match.title = "^(File Operation Progress|Confirm to replace files)$"
 default_floating = true
-default_size = [300, 100]
+default_size = [600, 100]
 
 ### Steam
 # Games

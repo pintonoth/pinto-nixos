@@ -61,7 +61,7 @@ default_pinned = true
 
 #Picture in Picture window_rule
 [[window_rule]]
-match.title = "^(?:Picture[_-]in[_-]?:Picture|.+['’]s Stream)$"
+match.title = "^(?:Picture[ _-]in[ _-][Pp]icture|.+['’]s Stream)$"
 opacity = 1.0
 blur = false
 default_floating = true

@@ -2,6 +2,87 @@
 
 Personal NixOS configuration managed with Nix flakes and Home Manager. The primary setup is Umbriel with Noctalia and Noctalia Greeter.
 
+## Fresh installation
+
+[`install.sh`](install.sh) automates the configuration and installation steps in
+the [NixOS manual's Installation summary](https://nixos.org/manual/nixos/stable/#sec-installation-summary).
+Use an x86_64 NixOS live USB booted in **UEFI mode**, with Internet access.
+The script first displays disks with their sizes, models, and mountpoints.
+Choose a disk to erase and partition, or choose **Skip** to use partitions
+already mounted at `/mnt` and `/mnt/boot` (with any target swap activated).
+On retries after a failed installation, choose Skip to preserve the prepared disk.
+
+For a new disk, choose ext4 (press Enter for this default), XFS, or Btrfs,
+then choose whether to create swap. Swap defaults to no; if enabled, its size
+defaults to 8 GiB. Btrfs uses a single filesystem without subvolumes.
+The script shows the proposed layout and requires the exact disk path before
+**erasing all data on that disk**. It rejects mounted disks, active device
+mappings, and read-only disks; unmount/deactivate them manually if appropriate.
+Existing active swap must be disabled before automated preparation so the
+hardware scan does not include another disk's swap.
+
+The GPT layout follows the manual's partition creation order, using explicit
+MiB/GiB units for aligned boundaries:
+
+| Partition | With swap | Without swap |
+| --- | --- | --- |
+| 1 | Root, from 512 MiB to the start of swap | Root, from 512 MiB to the end |
+| 2 | Swap, at the end of the disk | EFI, from 1 to 512 MiB |
+| 3 | EFI, from 1 to 512 MiB | — |
+| ESP flag | `set 3 esp on` | `set 2 esp on` |
+
+It formats and mounts the root and FAT32 EFI partitions, and activates swap
+when selected. SATA (`/dev/sda1`), NVMe (`/dev/nvme0n1p1`), and MMC
+(`/dev/mmcblk0p1`) partition naming are supported. Run the script from the live
+installer, not from a filesystem on the disk you intend to erase.
+
+From a copy of this repository on the live installer:
+
+```bash
+# If Git is missing, enter a shell providing it first:
+nix-shell -p git
+git clone https://github.com/pintonoth/pinto-nixos /tmp/pinto-nixos
+sudo bash /tmp/pinto-nixos/install.sh
+# Or select a host directly (still asks for installation confirmation):
+# sudo bash /tmp/pinto-nixos/install.sh pinto-nixos-umbriel
+```
+
+The script uses the existing checkout containing `install.sh`, lists the
+flake's available hosts, and asks you to confirm the target. It does not clone
+or copy the repository. It runs
+`nixos-generate-config --root /mnt`, backs up the checkout's original hardware
+configuration outside the checkout, and replaces it with the generated
+`/mnt/etc/nixos/hardware-configuration.nix`. From the checkout it then runs
+`nixos-install --flake .#<chosen-host>` with flakes enabled (the installation
+target defaults to `/mnt`).
+The generated top-level `/mnt/etc/nixos/configuration.nix` is not used for
+this flake installation.
+
+Review `modules/system/boot.nix`, `modules/system/drives.nix`, and
+`modules/system/users.nix` in your checkout before confirming; replacing
+the hardware file does not change their UEFI bootloader, extra NTFS mount UUIDs,
+or `jensend` account settings. You can edit them from another terminal at the
+confirmation prompt. A retry uses this same checkout and its local edits,
+and regenerates the hardware file. A failed install does not reboot.
+
+After installation succeeds, the script reads the normal users from the selected
+host configuration and runs `nixos-enter --root /mnt -c 'passwd ...'` for each
+one. For the current profiles this prompts you to set `jensend`'s password.
+Enter and confirm the password interactively; the script does not store it.
+If password setup fails, it stops and prints the command to retry manually.
+Once password setup completes, reboot when ready:
+
+```bash
+sudo reboot
+```
+
+`nixos-install` prompts separately for the root password. The updated checkout
+stays in its original location. If you cloned into `/tmp` on the live installer,
+save the checkout or generated hardware configuration to persistent storage
+before rebooting if you want to reuse it. The script does not place the repository
+on the installed system. The generated hardware file is also available at
+`/etc/nixos/hardware-configuration.nix` on the installed system.
+
 ## Primary configuration
 
 Build the Umbriel configuration without activating it:

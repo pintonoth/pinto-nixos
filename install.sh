@@ -4,6 +4,16 @@ set -Eeuo pipefail
 die() { printf 'Error: %s\n' "$*" >&2; exit 1; }
 trap 'printf "Installation stopped at line %s. Fix the error and rerun; no reboot was performed.\n" "$LINENO" >&2' ERR
 
+confirmation_prompt() {
+  local required=$1 action=$2 highlight='' reset=''
+  if [[ -t 2 && ${TERM:-dumb} != dumb && -z ${NO_COLOR:-} ]]; then
+    highlight=$'\033[1;93m'
+    reset=$'\033[0m'
+  fi
+  printf '\n>>> Type exactly: %s%s%s\n    %s\n> ' \
+    "$highlight" "$required" "$reset" "$action" >&2
+}
+
 usage() {
   cat <<'EOF'
 Usage: sudo bash install.sh [FLAKE_HOST]
@@ -19,6 +29,7 @@ configuration with the generated target configuration, and installs a chosen
 nixosConfigurations host directly from that checkout.
 Omit FLAKE_HOST for an interactive menu. Installation requires confirmation.
 After installation, prompts for passwords for the selected host's normal users.
+Builds use one job and one core at a time to reduce installer memory usage.
 EOF
 }
 
@@ -106,7 +117,8 @@ prepare_storage() {
   swap_part=$(partition_path "$disk" 2)
   printf '\nERASE ALL DATA on %s\nRoot: %s (%s)\nSwap: %s GiB\nEFI: %s (FAT32, 1–512 MiB)\n' \
     "$disk" "$root_part" "$fs" "$swap_gib" "$esp_part"
-  read -r -p "Type the full disk path ($disk) to erase it: " confirmation || die 'Confirmation required.'
+  confirmation_prompt "$disk" 'to erase this disk and create the partitions.'
+  read -r confirmation || die 'Confirmation required.'
   [[ $confirmation == "$disk" ]] || die 'Cancelled before erasing.'
   check_unused_disk "$disk"
   partition_disk "$disk" "$fs" "$swap_gib"
@@ -173,7 +185,8 @@ findmnt -R /mnt
 printf '\nRepository: %s\nFlake: .#%s\n' "$repo" "$host"
 printf 'Review modules/system/boot.nix, drives.nix, and users.nix for this machine.\n'
 printf 'This will replace the checkout hardware configuration and install to /mnt.\n'
-read -r -p 'Type install to continue: ' confirmation || die 'Confirmation required.'
+confirmation_prompt install 'to install the selected host to /mnt.'
+read -r confirmation || die 'Confirmation required.'
 [[ $confirmation == install ]] || die 'Cancelled.'
 
 # Generate outside the checkout so the generated configuration.nix cannot
@@ -193,7 +206,8 @@ for login_user in "${login_users[@]}"; do
   [[ $login_user =~ ^[a-zA-Z_][a-zA-Z0-9_.-]*\$?$ ]] || die "Unsupported login name: $login_user"
 done
 # The existing tracked hardware file is included by Git flakes even when dirty.
-nixos-install --flake ".#$host"
+printf 'Installing with one build job and one core to reduce memory pressure.\n'
+nixos-install --flake ".#$host" --max-jobs 1 --cores 1
 for login_user in "${login_users[@]}"; do
   printf '\nSet the login password for %s on the installed system:\n' "$login_user"
   nixos-enter --root /mnt -c "passwd -- '$login_user'" || \

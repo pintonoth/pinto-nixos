@@ -53,10 +53,17 @@ or copy the repository. It runs
 `nixos-generate-config --root /mnt`, backs up the checkout's original hardware
 configuration outside the checkout, and replaces it with the generated
 `/mnt/etc/nixos/hardware-configuration.nix`. From the checkout it then runs
-`nixos-install --flake .#<chosen-host>` with flakes enabled (the installation
+`nixos-install --flake .#<chosen-host> --max-jobs 1 --cores 1` with flakes enabled (the installation
 target defaults to `/mnt`).
 The generated top-level `/mnt/etc/nixos/configuration.nix` is not used for
 this flake installation.
+
+The build limits reduce memory pressure when compiling desktop components on
+the live installer. They can make builds slower and do not guarantee enough
+memory for every build. If installation is killed with `Out of memory`, keep
+the existing mounts and choose **Skip** at the disk menu when retrying. Check
+`free -h` and `swapon --show` to see available RAM and active swap. Already
+completed store paths can be reused; the interrupted build may restart.
 
 Review `modules/system/boot.nix`, `modules/system/drives.nix`, and
 `modules/system/users.nix` in your checkout before confirming; replacing

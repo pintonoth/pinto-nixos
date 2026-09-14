@@ -24,10 +24,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    xwayland-satellite = {
-      url = "github:Supreeeme/xwayland-satellite/v0.8.1";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     persona = {
       url = "github:Yujonpradhananga/Persona-Quickshell/6bb02aa50f609be8047f67b8a9984274c91e2060";
       flake = false;

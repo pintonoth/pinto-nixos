@@ -11,16 +11,15 @@
     # Enables NetworkManager, Bluetooth, UPower, and a power profile service.
     recommendedServices.enable = true;
   };
-  programs.noctalia-greeter = {
-    enable = true;
 
+  services.displayManager.noctalia-greeter = {
+    enable = true;
     settings = {
       cursor = {
         theme = config.stylix.cursor.name;
         size = config.stylix.cursor.size;
         path = "${config.stylix.cursor.package}/share/icons";
       };
-
       idle.timeout = 300;
     };
   };

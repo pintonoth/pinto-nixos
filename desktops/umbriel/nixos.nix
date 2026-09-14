@@ -17,7 +17,7 @@
     package = pkgs.umbriel;
   };
 
-  programs.noctalia-greeter.settings = {
+  services.displayManager.noctalia-greeter.settings = {
     session.default = "umbriel";
 
     appearance = {

@@ -1,0 +1,56 @@
+[Desktops]
+Id_1=6711b29f-055c-41be-9172-8b9f4cf517be
+Id_2=889937ce-c025-4ddf-93b2-56e07b2171ad
+Id_3=fb3c65f2-da82-4ef1-a3ca-22abb78ff926
+Id_4=f77b52cf-3aab-4d14-96c4-9181132433f3
+Id_5=e339a0b3-9f9b-4eeb-b4af-5ded5de44f63
+Name_2=Workspace 2
+Name_3=Workspace 3
+Name_4=Workspace 4
+Name_5=Workspace 5
+Number=5
+Rows=5
+
+[Mouse]
+cursorSize=24
+cursorTheme=Bibata-Modern-Ice
+
+[Plugins]
+fadeEnabled=true
+magiclampEnabled=true
+scaleEnabled=false
+squashEnabled=false
+wobblywindowsEnabled=true
+
+[Tiling]
+TilingBorderMode=ActiveOnly
+
+[Tiling][6711b29f-055c-41be-9172-8b9f4cf517be][511d414a-b716-423b-a690-260c096e181f]
+padding=4
+tiles={"layoutDirection":"floating","tiles":[]}
+
+[Tiling][889937ce-c025-4ddf-93b2-56e07b2171ad][511d414a-b716-423b-a690-260c096e181f]
+padding=4
+tiles={"layoutDirection":"floating","tiles":[{"height":0.3333333333333333,"width":0.5,"x":0.5,"y":0},{"height":1,"width":0.5,"x":0,"y":0},{"height":0.3333333333333333,"width":0.5,"x":0.5,"y":0.3333333333333333},{"height":0.33333333333333337,"width":0.5,"x":0.5,"y":0.6666666666666666}]}
+
+[Tiling][e339a0b3-9f9b-4eeb-b4af-5ded5de44f63][511d414a-b716-423b-a690-260c096e181f]
+padding=4
+tiles={"layoutDirection":"floating","tiles":[{"height":1,"width":1,"x":0,"y":0}]}
+
+[Tiling][f77b52cf-3aab-4d14-96c4-9181132433f3][511d414a-b716-423b-a690-260c096e181f]
+padding=4
+tiles={"layoutDirection":"floating","tiles":[{"height":1,"width":1,"x":0,"y":0}]}
+
+[Tiling][fb3c65f2-da82-4ef1-a3ca-22abb78ff926][511d414a-b716-423b-a690-260c096e181f]
+padding=4
+tiles={"layoutDirection":"floating","tiles":[{"height":1,"width":1,"x":0,"y":0}]}
+
+[Wayland]
+InputMethod=/usr/share/applications/org.fcitx.Fcitx5.desktop
+
+[Windows]
+DefaultDecorationPolicy=0
+DefaultInactiveOpacity=100
+
+[Xwayland]
+Scale=2

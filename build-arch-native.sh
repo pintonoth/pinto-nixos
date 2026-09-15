@@ -723,8 +723,9 @@ setup_noctalia_greeter() {
         info "Configuring noctalia-greeter..."
         meson setup "$greeter_src/build" "$greeter_src" \
             --prefix=/usr/local \
-            --buildtype=release \
-            -Dtests=disabled
+            --buildtype=release
+            # --buildtype=release \
+            # -Dtests=disabled
 
         info "Building noctalia-greeter..."
         meson compile -C "$greeter_src/build" --jobs "$(nproc)"

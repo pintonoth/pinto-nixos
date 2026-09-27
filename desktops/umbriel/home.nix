@@ -12,7 +12,7 @@ let
     mkdir config
     cp ${../../home/config/umbriel}/*.toml config/
     touch config/noctalia.toml
-    ${lib.getExe config.programs.umbriel.package} validate -c config/config.toml
+    ${lib.getExe config.programs.umbriel.package} config validate -c config/config.toml
     cp config/config.toml $out
   '';
 in

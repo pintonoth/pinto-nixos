@@ -25,9 +25,9 @@
 #Scrolling only
 "Mod+9" = "window-consume-or-expel-left"
 "Mod+0" = "window-consume-or-expel-right"
-"Mod+N" = "window-modify-width:-0.2"
-"Mod+M" = "window-modify-width:+0.2"
-"Mod+R" = "window-cycle-width"
+"Mod+N" = "window-modify-primary-extent:-0.2"
+"Mod+M" = "window-modify-primary-extent:+0.2"
+"Mod+R" = "window-cycle-primary-extent"
 
 #Scratchpad
 "Mod+Shift+Space" = "window-move-to-scratchpad"

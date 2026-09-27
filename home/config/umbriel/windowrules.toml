@@ -20,19 +20,19 @@ blur = true
 [[window_rule]]
 match.app_id = "^(dev.noctalia.Noctalia|xdg-desktop-portal-gtk)$"
 default_floating = true
-default_size = [1020, 900]
+default_floating_size_px = { width = 1020, height = 900 }
 
 [[window_rule]]
 match.app_id = "^dev.noctalia.UmbrielSharePicker$"
 default_floating = true
-default_size = [800, 600]
+default_floating_size_px = { width = 800, height = 600 }
 
 #Thunar
 [[window_rule]]
 match.app_id = "thunar"
 match.title = "^(File Operation Progress|Confirm to replace files)$"
 default_floating = true
-default_size = [600, 100]
+default_floating_size_px = { width = 600, height = 100 }
 
 ### Steam
 # Games
@@ -41,7 +41,7 @@ match.app_id = "^steam_app_.*$"
 opacity = 1.0
 blur = false
 default_floating = true
-default_size = [1280, 720]
+default_floating_size_px = { width = 1280, height = 720 }
 default_focused = true
 default_position = { x = 0, y = 0 }
 default_workspace = 3
@@ -65,7 +65,7 @@ match.title = "^(?:Picture[ _-]in[ _-][Pp]icture|.+['’]s Stream)$"
 opacity = 1.0
 blur = false
 default_floating = true
-default_size = [ 480, 270 ]
+default_floating_size_px = { width = 480, height = 270 }
 default_pinned = true
 default_focused = false
 default_position = { x = 8, y = 8, anchor = "top_right" }

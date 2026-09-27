@@ -76,7 +76,7 @@ enabled = true
 [input.cursor]
 theme = ""
 size = 24
-hardware_cursor = true
+hardware_cursor = false
 hide_when_typing = false
 hide_timeout_ms = 0
 

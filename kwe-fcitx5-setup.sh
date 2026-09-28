@@ -4,68 +4,97 @@
 # WHY THIS EXISTS (KineticWE-specific; verified against src/ and the live session)
 #
 #  * KineticWE implements only zwp_input_method_v1 (there is no input-method-v2
-#    in the tree) and exposes it — plus zwp_input_panel_v1 — exclusively to the
+#    anywhere in the tree) and exposes it — plus zwp_input_panel_v1 — only to the
 #    process the compositor spawns itself:
-#        InputMethod::startInputMethod()   src/inputmethod.cpp   (private socket)
+#        InputMethod::startInputMethod()   src/inputmethod.cpp        (private socket)
 #        KWinDisplay::allowInterface()     src/wayland_server.cpp:148-156
-#    A fcitx5 started from ~/.config/autostart can therefore bind nothing: it
-#    gets zero input contexts, never sees keystrokes, and Ctrl+Space has nothing
-#    to toggle. That is exactly what fcitx5's own warning describes
-#    ("Fcitx should be launched by KWin ... Virtual keyboard -> Fcitx 5").
+#    A fcitx5 started from ~/.config/autostart can therefore bind nothing: zero
+#    input contexts, no keystrokes, nothing for Ctrl+Space to toggle — exactly
+#    what fcitx5's own warning describes ("Fcitx should be launched by KWin ...
+#    Virtual keyboard -> Fcitx 5").
 #
-#  * So the COMPOSITOR must own the process, via the same key Plasma's virtual
-#    keyboard KCM writes:
+#  * So the COMPOSITOR must own the process, via the key Plasma's virtual-keyboard
+#    KCM writes:
 #        [Wayland]
-#        InputMethod=/usr/share/applications/org.fcitx.Fcitx5.desktop
-#    in $KWE_CONFIG_HOME/kineticwe.kwe, read by
-#    ApplicationWayland::refreshSettings() -> InputMethod::setInputMethodCommand().
+#        InputMethod=<absolute path to a .desktop file>
+#    in $KWE_CONFIG_HOME/kineticwe.kwe, read by ApplicationWayland::refreshSettings()
+#    -> InputMethod::setInputMethodCommand(); the compositor runs that entry's Exec.
 #
 #  * The compositor runs with XDG_CONFIG_HOME=$KWE_CONFIG_HOME and
 #    XDG_CACHE_HOME=$HOME/.cache/kineticwe (scripts/start-kineticwe.sh:1084-1087).
-#    Its child fcitx5 inherits both, so everything fcitx5 spawns (think
-#    fcitx5-configtool from its tray menu) resolves its config under
-#    ~/.config/kineticwe and misses the user's real ~/.config/qt6ct/qt6ct.conf
-#    (Noctalia palette + fonts), ~/.config/qt5ct and ~/.config/fcitx5. The theme
-#    symlinks below restore that; the clean fix is a compositor patch handing the
-#    input method the real config home (kineticweRealConfigDir()).
+#    Its child fcitx5 — and everything fcitx5 spawns, e.g. fcitx5-configtool from
+#    its tray menu — inherits that, so qt6ct looks for its config in
+#    ~/.config/kineticwe/qt6ct/ (absent -> default light palette, the "white
+#    theme"), and fcitx5 writes its own config into ~/.config/kineticwe/fcitx5/,
+#    which the session script's step 4d prune (scripts/start-kineticwe.sh:259-286)
+#    deletes on every login — silently resetting the user's fcitx5 settings.
+#
+#  * Fix, without touching the compositor or the session script: point InputMethod
+#    at a small user-level desktop entry whose Exec hands fcitx5 the user's real
+#    config/cache homes explicitly, before starting it:
+#        Exec=/usr/bin/env XDG_CONFIG_HOME=/home/USER/.config \
+#             XDG_CACHE_HOME=/home/USER/.cache /usr/bin/fcitx5
+#    The paths are baked in by this script for the machine it runs on
+#    ($REAL_CONFIG_HOME / $REAL_CACHE_HOME below), so nothing is hardcoded to one
+#    user and re-running the script refreshes them elsewhere.
+#
+#    Why explicit values rather than `env -u XDG_CONFIG_HOME -u XDG_CACHE_HOME`:
+#    unsetting only works where every consumer implements the XDG fallback to
+#    $HOME/.config / $HOME/.cache, and fcitx5 resolves its own directory by reading
+#    that variable itself (the literal "XDG_CONFIG_HOME" is in libFcitx5Utils.so),
+#    not through Qt's QStandardPaths. The explicit form is the one verified end to
+#    end; --unset-form emits the unset variant instead (needs a fresh login to take
+#    effect, and is only worth it if you want to test that path).
+#
+#    Either way /usr/bin/env uses execvp — it does not fork — so the compositor's
+#    process tracking, its crash-restart bookkeeping and the inherited
+#    WAYLAND_SOCKET fd keep working on fcitx5 itself. And do NOT instead symlink
+#    ~/.config/qt6ct (or qt5ct, fcitx5) into $KWE_CONFIG_HOME: step 4d prunes
+#    everything there that is not compositor-owned, so such links die at login.
 #
 # WHAT IT CHANGES
-#   1. $KWE_CONFIG_HOME/kineticwe.kwe           [Wayland] InputMethod=<desktop file>
-#      (in-place patch, every other line untouched; backup written once per run;
-#      skip with --no-config when the file is managed declaratively, e.g. by
-#      home-manager, where a store symlink must not be replaced)
-#   2. $REAL_CONFIG_HOME/autostart/org.fcitx.Fcitx5.desktop
-#      standard XDG override with Hidden=true, so the shell's autostart
-#      launcher and systemd's xdg-autostart generator both skip it and the
-#      compositor's instance is the only one.
-#   3. $KWE_CONFIG_HOME/{qt6ct,qt5ct,fcitx5} -> symlinks into the real config
-#      home (skip with --no-theme-symlinks).
+#   1. $XDG_DATA_HOME/applications/kwe-fcitx5.desktop
+#      the wrapper entry above, with X-KDE-Wayland-VirtualKeyboard=true so Kinetic
+#      Settings' Virtual Keyboard page lists it. Its Exec is derived from the stock
+#      fcitx5 entry (see --im). Skip the wrapper with --no-wrapper: InputMethod then
+#      points straight at the stock entry (debugging / upstream parity).
+#   2. $KWE_CONFIG_HOME/kineticwe.kwe     [Wayland] InputMethod=<wrapper entry>
+#      (in-place patch, every other line untouched; one backup per run; skip with
+#      --no-config when that file is managed declaratively, e.g. by home-manager,
+#      where a store symlink must not be replaced)
+#   3. $REAL_CONFIG_HOME/autostart/org.fcitx.Fcitx5.desktop
+#      standard XDG override with Hidden=true, so the shell's autostart launcher
+#      and systemd's xdg-autostart generator both skip it and the compositor's
+#      instance is the only one.
 #   4. $REAL_CONFIG_HOME/environment.d/50-kwe-input-method.conf
 #      XMODIFIERS=@im=fcitx for X11/XWayland apps (skip with --no-xmodifiers).
 #      NOT QT_IM_MODULE/GTK_IM_MODULE: on a text-input compositor those cause
-#      fcitx's blinking candidate window; native Qt/GTK use text-input.
-#   5. Stops an already-running fcitx5 that was NOT spawned by the compositor,
-#      so the compositor's instance can take the org.fcitx.Fcitx5 D-Bus name.
+#      fcitx's blinking candidate window; native Qt/GTK apps use text-input.
+#   5. Stops a running fcitx5 that was NOT spawned by the compositor, so the
+#      compositor's instance can take the org.fcitx.Fcitx5 D-Bus name.
 #
-# Idempotent: safe to re-run (after upgrades, or on every fresh install).
-# Nothing here restarts your compositor — log out and back in afterwards.
+# The compositor reads the entry's Exec at startup, or when kineticwe.kwe changes —
+# editing the entry alone is not a live reload. Log out and back in afterwards
+# (--verify prints fcitx5's live XDG_CONFIG_HOME so you can confirm it took).
 #
 # REVERT
-#   * delete the [Wayland] InputMethod line from $KWE_CONFIG_HOME/kineticwe.kwe
-#   * rm $REAL_CONFIG_HOME/autostart/org.fcitx.Fcitx5.desktop (restore the
+#   * rm $XDG_DATA_HOME/applications/kwe-fcitx5.desktop  (or re-run with --no-wrapper)
+#   * restore [Wayland] InputMethod in $KWE_CONFIG_HOME/kineticwe.kwe (see the
+#     .bak-fcitx5-setup copy written by the first run)
+#   * rm $REAL_CONFIG_HOME/autostart/org.fcitx.Fcitx5.desktop (restore its
 #     .bak-fcitx5-setup copy if one was made)
-#   * rm $KWE_CONFIG_HOME/{qt6ct,qt5ct,fcitx5}
 #   * rm $REAL_CONFIG_HOME/environment.d/50-kwe-input-method.conf
 #
 # USAGE
 #   kwe-fcitx5-setup [--dry-run] [--verify] [--im FILE.desktop]
-#                    [--no-theme-symlinks] [--no-xmodifiers] [--no-config]
+#                    [--no-wrapper] [--unset-form] [--no-config] [--no-xmodifiers]
 
 set -euo pipefail
 
 DRY_RUN=0
 VERIFY_ONLY=0
-THEME_SYMLINKS=1
+WRAPPER=1
+UNSET_FORM=0
 XMODIFIERS=1
 PATCH_CONFIG=1
 IM_DESKTOP=""
@@ -91,7 +120,8 @@ while (($#)); do
     case "$1" in
         -n | --dry-run) DRY_RUN=1 ;;
         --verify) VERIFY_ONLY=1 ;;
-        --no-theme-symlinks) THEME_SYMLINKS=0 ;;
+        --no-wrapper) WRAPPER=0 ;;
+        --unset-form) UNSET_FORM=1 ;;
         --no-xmodifiers) XMODIFIERS=0 ;;
         --no-config) PATCH_CONFIG=0 ;;
         --im)
@@ -111,57 +141,87 @@ done
 # --- Paths -------------------------------------------------------------------
 # The compositor's private config root (KDirWatch on kineticwe.kwe lives here).
 KWE_CONFIG_HOME="${KWE_CONFIG_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/kineticwe}"
-# The user's real config home: autostart, environment.d, qt6ct/qt5ct/fcitx5.
+# The real config/cache homes are baked into the wrapper entry's Exec, so they must
+# be the real ones even when this script runs from a compositor-influenced shell.
 REAL_CONFIG_HOME="${KWE_REAL_CONFIG_HOME:-}"
 if [[ -z "$REAL_CONFIG_HOME" || "$REAL_CONFIG_HOME" == "$KWE_CONFIG_HOME" ]]; then
-    REAL_CONFIG_HOME="$HOME/.config"
+    REAL_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+    [[ "$REAL_CONFIG_HOME" == "$KWE_CONFIG_HOME" ]] && REAL_CONFIG_HOME="$HOME/.config"
 fi
+REAL_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+if [[ "$REAL_CACHE_HOME" == "$HOME/.cache/kineticwe" || "$REAL_CACHE_HOME" == "$KWE_CONFIG_HOME"* ]]; then
+    REAL_CACHE_HOME="$HOME/.cache"
+fi
+DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 KWE_RC="$KWE_CONFIG_HOME/kineticwe.kwe"
+ENTRY_FILE="$DATA_HOME/applications/kwe-fcitx5.desktop"
+
+# Reads a key from the [Desktop Entry] group.
+desktop_value() { # file key
+    awk -F= -v want="$2" '
+        /^\[/ { in_de = ($0 == "[Desktop Entry]"); next }
+        in_de && $1 == want { sub(/^[^=]*=[[:space:]]*/, ""); print; exit }
+    ' "$1"
+}
+
+env_of_pid() { # pid varname
+    tr '\0' '\n' <"/proc/$1/environ" 2>/dev/null | sed -n "s/^$2=//p"
+}
 
 # --- Status report (--verify) ------------------------------------------------
 report_status() {
+    local cfg_input="" pid env_config env_cache entry_exec baked
     say "KineticWE input-method status"
     say "  compositor config : $KWE_RC"
     if [[ -f "$KWE_RC" ]]; then
-        local line
-        line="$(grep -m1 '^[[:space:]]*InputMethod[[:space:]]*=' "$KWE_RC" || true)"
-        if [[ -n "$line" ]]; then
-            say "  InputMethod       : ${line#*=}"
+        cfg_input="$(awk -F= '/^\[Wayland\]/{f=1;next} /^\[/{f=0} f && $1=="InputMethod"{sub(/^[^=]*=/,"");print;exit}' "$KWE_RC")"
+    fi
+    say "  InputMethod       : ${cfg_input:-(not set)}"
+    if [[ -n "$cfg_input" ]]; then
+        if [[ "$cfg_input" == "$ENTRY_FILE" ]]; then
+            say "  wrapper entry     : in use"
         else
-            say "  InputMethod       : (not set)"
+            say "  wrapper entry     : NOT in use (InputMethod points at $cfg_input)"
+        fi
+    fi
+    if [[ -f "$ENTRY_FILE" ]]; then
+        entry_exec="$(desktop_value "$ENTRY_FILE" Exec)"
+        say "  entry Exec        : $entry_exec"
+        baked="$(printf '%s' "$entry_exec" | grep -o 'XDG_CONFIG_HOME=[^ ]*' | head -1 | cut -d= -f2 | tr -d '"')"
+        if [[ -n "$baked" && "$baked" != "$REAL_CONFIG_HOME" ]]; then
+            say "                      ^ baked for '$baked', this machine's config home is"
+            say "                        '$REAL_CONFIG_HOME' — re-run to refresh the entry"
+        fi
+        if [[ -z "$baked" ]] && ! printf '%s' "$entry_exec" | grep -q -- '-u XDG_CONFIG_HOME'; then
+            say "                      ^ fcitx5 gets no XDG_CONFIG_HOME: it inherits the kineticwe root"
         fi
     else
-        say "  InputMethod       : (config file does not exist yet)"
+        say "  entry Exec        : (missing: $ENTRY_FILE)"
     fi
 
-    local pid
     pid="$(pgrep -x fcitx5 | head -1 || true)"
     if [[ -z "$pid" ]]; then
         say "  fcitx5            : not running"
-    elif tr '\0' '\n' <"/proc/$pid/environ" 2>/dev/null | grep -q '^WAYLAND_SOCKET='; then
-        say "  fcitx5            : pid $pid — spawned by the compositor (correct)"
     else
-        say "  fcitx5            : pid $pid — NOT spawned by the compositor (cannot bind any input method global)"
+        if tr '\0' '\n' <"/proc/$pid/environ" 2>/dev/null | grep -q '^WAYLAND_SOCKET='; then
+            say "  fcitx5            : pid $pid — spawned by the compositor (correct)"
+        else
+            say "  fcitx5            : pid $pid — NOT spawned by the compositor (cannot bind any input method global)"
+        fi
+        env_config="$(env_of_pid "$pid" XDG_CONFIG_HOME)"
+        env_cache="$(env_of_pid "$pid" XDG_CACHE_HOME)"
+        say "  fcitx5 XDG_CONFIG : ${env_config:-(unset -> \$HOME/.config)}"
+        say "  fcitx5 XDG_CACHE  : ${env_cache:-(unset -> \$HOME/.cache)}"
+        if [[ "$env_config" == "$KWE_CONFIG_HOME" ]]; then
+            say "                      ^ still redirected: the wrapper is not active yet (log out/in)"
+        fi
     fi
 
     if command -v dbus-send >/dev/null 2>&1; then
-        local available
-        available="$(dbus-send --session --print-reply --dest=org.kde.KWin /VirtualKeyboard \
+        say "  VirtualKeyboard   : available=$(dbus-send --session --print-reply --dest=org.kde.KWin /VirtualKeyboard \
             org.freedesktop.DBus.Properties.Get string:org.kde.kwin.VirtualKeyboard string:available 2>/dev/null \
-            | tail -1 | grep -o 'true\|false' || true)"
-        say "  VirtualKeyboard   : available=${available:-unknown}"
+            | tail -1 | grep -o 'true\|false' || echo unknown)"
     fi
-
-    local target
-    for target in qt6ct qt5ct fcitx5; do
-        if [[ -L "$KWE_CONFIG_HOME/$target" ]]; then
-            say "  $target symlink     : $(readlink "$KWE_CONFIG_HOME/$target")"
-        elif [[ -e "$KWE_CONFIG_HOME/$target" ]]; then
-            say "  $target symlink     : MISSING (a real directory sits there instead)"
-        else
-            say "  $target symlink     : missing"
-        fi
-    done
 }
 
 if ((VERIFY_ONLY)); then
@@ -173,14 +233,7 @@ fi
 command -v fcitx5 >/dev/null 2>&1 || die "fcitx5 is not installed (install it first, e.g. 'sudo pacman -S fcitx5 fcitx5-configtool')"
 [[ -d "$KWE_CONFIG_HOME" ]] || warn "$KWE_CONFIG_HOME does not exist yet — it is created by the first KineticWE login; writing it now anyway"
 
-# --- 1. Which input method desktop file? -------------------------------------
-desktop_exec() {
-    awk -F= '
-        /^\[/ { in_de = ($0 == "[Desktop Entry]"); next }
-        in_de && /^Exec[[:space:]]*=/ { sub(/^Exec[[:space:]]*=[[:space:]]*/, ""); print; exit }
-    ' "$1"
-}
-
+# --- 1. Stock entry: which binary should the wrapper start? ------------------
 if [[ -z "$IM_DESKTOP" ]]; then
     IFS=: read -r -a _data_dirs <<<"${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
     for _dir in "${_data_dirs[@]}"; do
@@ -191,23 +244,86 @@ if [[ -z "$IM_DESKTOP" ]]; then
     done
 fi
 [[ -n "$IM_DESKTOP" ]] || die "could not find $DEFAULT_IM_NAME in \$XDG_DATA_DIRS/applications — pass --im <file.desktop>"
+[[ -f "$IM_DESKTOP" ]] || warn "$IM_DESKTOP does not exist"
 
-if [[ ! -f "$IM_DESKTOP" ]]; then
-    warn "$IM_DESKTOP does not exist"
-fi
-IM_EXEC="$(desktop_exec "$IM_DESKTOP" || true)"
+IM_EXEC="$(desktop_value "$IM_DESKTOP" Exec)"
 [[ -n "$IM_EXEC" ]] || die "$IM_DESKTOP has no Exec= line"
 IM_PROGRAM="${IM_EXEC%% *}"
+IM_ICON="$(desktop_value "$IM_DESKTOP" Icon)"
 [[ -x "$IM_PROGRAM" ]] || warn "Exec points at '$IM_PROGRAM', which is not executable"
+ENV_BIN="$(command -v env || true)"
+[[ -n "$ENV_BIN" ]] || die "the 'env' utility is required for the wrapper entry"
 if ! grep -q '^X-KDE-Wayland-VirtualKeyboard=true' "$IM_DESKTOP" 2>/dev/null; then
     warn "$IM_DESKTOP lacks X-KDE-Wayland-VirtualKeyboard=true (not a compositor-launchable input method)"
 fi
+say "stock entry       : $IM_DESKTOP (Exec=$IM_EXEC)"
 
-say "input method      : $IM_DESKTOP (Exec=$IM_EXEC)"
+IM_TARGET="$IM_DESKTOP"
+((WRAPPER)) && IM_TARGET="$ENTRY_FILE"
 
-# --- 2. Patch the compositor config ------------------------------------------
+# The command line the compositor will run, i.e. the wrapper entry's Exec line.
+if ((UNSET_FORM)); then
+    IM_EXEC_LINE="$ENV_BIN -u XDG_CONFIG_HOME -u XDG_CACHE_HOME $IM_PROGRAM"
+else
+    IM_EXEC_LINE="$ENV_BIN XDG_CONFIG_HOME=$REAL_CONFIG_HOME XDG_CACHE_HOME=$REAL_CACHE_HOME $IM_PROGRAM"
+fi
+
+# --- 2. The wrapper entry ----------------------------------------------------
+# Returns 0 when the file changed, 1 when it was already identical.
+write_wrapper_entry() {
+    mkdir -p "$DATA_HOME/applications"
+    local content
+    content="$(cat <<EOF
+[Desktop Entry]
+Type=Application
+Name=Fcitx 5 (KineticWE)
+GenericName=Input Method
+Comment=Compositor-managed fcitx5 with the user's real XDG config/cache home
+Exec=$IM_EXEC_LINE
+Icon=${IM_ICON:-fcitx}
+Terminal=false
+NoDisplay=true
+StartupNotify=false
+# The KineticWE compositor owns the fcitx5 process: only a compositor-spawned
+# client receives zwp_input_method_v1 / zwp_input_panel_v1 (no input-method-v2 in
+# the tree), so an autostarted fcitx5 can never work (see kwe-fcitx5-setup).
+X-KDE-Wayland-VirtualKeyboard=true
+X-KDE-Wayland-Interfaces=org_kde_plasma_window_management
+# XDG_CONFIG_HOME / XDG_CACHE_HOME are set to the user's real homes on purpose: the
+# compositor runs with them redirected to the kineticwe root
+# (scripts/start-kineticwe.sh), which hides ~/.config/qt6ct (Noctalia palette and
+# fonts) from fcitx5's tools and makes fcitx5 write its config into a root that the
+# session script prunes on every login. Generated by kwe-fcitx5-setup.
+X-KineticWE-InputMethod=config-home-wrapper
+EOF
+)"
+    if [[ -f "$ENTRY_FILE" && "$(cat "$ENTRY_FILE")" == "$content" ]]; then
+        return 1
+    fi
+    printf '%s\n' "$content" >"$ENTRY_FILE"
+    return 0
+}
+
+if ((WRAPPER)); then
+    if ((DRY_RUN)); then
+        say "wrapper entry     : would write $ENTRY_FILE"
+        say "                    Exec=$IM_EXEC_LINE"
+    elif write_wrapper_entry; then
+        say "wrapper entry     : written to $ENTRY_FILE"
+        say "                    Exec=$IM_EXEC_LINE"
+        if command -v kbuildsycoca6 >/dev/null 2>&1; then
+            kbuildsycoca6 --noincremental >/dev/null 2>&1 || true
+        fi
+    else
+        say "wrapper entry     : already up to date at $ENTRY_FILE"
+    fi
+else
+    say "wrapper entry     : skipped (--no-wrapper)"
+fi
+
+# --- 3. Point the compositor at the entry ------------------------------------
 patch_config() {
-    python3 - "$KWE_RC" "$IM_DESKTOP" <<'PY'
+    python3 - "$KWE_RC" "$1" <<'PY'
 import os
 import re
 import sys
@@ -263,28 +379,27 @@ PY
 }
 
 if ((PATCH_CONFIG == 0)); then
-    say "compositor config : skipped (--no-config); keep [Wayland] InputMethod=$IM_DESKTOP in the managed file"
+    say "compositor config : skipped (--no-config); keep [Wayland] InputMethod=$IM_TARGET in the managed file"
 elif ! command -v python3 >/dev/null 2>&1; then
     warn "python3 is missing — cannot patch $KWE_RC automatically; add this by hand:"
     warn "    [Wayland]"
-    warn "    InputMethod=$IM_DESKTOP"
+    warn "    InputMethod=$IM_TARGET"
 elif ((DRY_RUN)); then
-    say "compositor config : would set [Wayland] InputMethod=$IM_DESKTOP in $KWE_RC"
+    say "compositor config : would set [Wayland] InputMethod=$IM_TARGET in $KWE_RC"
 else
     _bak="$KWE_RC.bak-fcitx5-setup"
     if [[ -f "$KWE_RC" && ! -e "$_bak" ]]; then
         cp -p "$KWE_RC" "$_bak"
         note "backup: $_bak"
     fi
-    _result="$(patch_config)"
-    if [[ "$_result" == changed ]]; then
-        say "compositor config : [Wayland] InputMethod set in $KWE_RC"
+    if [[ "$(patch_config "$IM_TARGET")" == changed ]]; then
+        say "compositor config : [Wayland] InputMethod=$IM_TARGET in $KWE_RC"
     else
         say "compositor config : already correct in $KWE_RC"
     fi
 fi
 
-# --- 3. One launcher only: hide the XDG autostart entry ----------------------
+# --- 4. One launcher only: hide the XDG autostart entry ----------------------
 AUTOSTART_DIR="$REAL_CONFIG_HOME/autostart"
 AUTOSTART_FILE="$AUTOSTART_DIR/$DEFAULT_IM_NAME"
 
@@ -335,41 +450,6 @@ else
     fi
 fi
 
-# --- 4. Theme symlinks into the real config home -----------------------------
-symlink_into_real_home() {
-    local name="$1" target="$REAL_CONFIG_HOME/$1" link="$KWE_CONFIG_HOME/$1"
-    mkdir -p "$target"
-    if [[ -L "$link" ]]; then
-        if [[ "$(readlink "$link")" == "$target" ]]; then
-            note "$name: already linked"
-            return 0
-        fi
-        warn "$name: $link points elsewhere ($(readlink "$link")) — leaving it alone"
-        return 0
-    fi
-    if [[ -e "$link" ]]; then
-        if [[ -z "$(find "$link" -mindepth 1 -print -quit 2>/dev/null)" ]]; then
-            rmdir "$link"
-        else
-            mv "$link" "$link.leaked-env-bak"
-            note "$name: moved the compositor-env copy to $link.leaked-env-bak"
-        fi
-    fi
-    ln -s "$target" "$link"
-    note "$name: $link -> $target"
-}
-
-if ((THEME_SYMLINKS)); then
-    if ((DRY_RUN)); then
-        say "theme symlinks    : would link qt6ct, qt5ct, fcitx5 under $KWE_CONFIG_HOME"
-    else
-        say "theme symlinks    : fcitx5's children (e.g. fcitx5-configtool) read these"
-        symlink_into_real_home qt6ct
-        symlink_into_real_home qt5ct
-        symlink_into_real_home fcitx5
-    fi
-fi
-
 # --- 5. XMODIFIERS for X11 / XWayland apps -----------------------------------
 ENV_D_DIR="$REAL_CONFIG_HOME/environment.d"
 ENV_D_FILE="$ENV_D_DIR/50-kwe-input-method.conf"
@@ -402,6 +482,9 @@ IM_PID="$(pgrep -x fcitx5 | head -1 || true)"
 if [[ -n "$IM_PID" ]]; then
     if tr '\0' '\n' <"/proc/$IM_PID/environ" 2>/dev/null | grep -q '^WAYLAND_SOCKET='; then
         say "running fcitx5    : pid $IM_PID is already compositor-managed — leaving it"
+        if [[ "$(env_of_pid "$IM_PID" XDG_CONFIG_HOME)" == "$KWE_CONFIG_HOME" ]]; then
+            note "it still uses the redirected config home; the wrapper takes effect on the next login"
+        fi
     elif command -v fcitx5-remote >/dev/null 2>&1 && fcitx5-remote --check >/dev/null 2>&1; then
         if ((DRY_RUN)); then
             say "running fcitx5    : would quit pid $IM_PID (fcitx5-remote -e)"
@@ -425,8 +508,15 @@ fi
 # --- Summary -----------------------------------------------------------------
 say ""
 say "done. next steps:"
-say "  1. log out of KineticWE and back in (the compositor reads [Wayland] InputMethod at startup;"
-say "     it does not re-read it live on every build)."
-say "  2. verify:  $0 --verify"
-say "  3. then focus a text field and press Ctrl+Space (fcitx5 default trigger key)."
+say "  1. log out of KineticWE and back in — the compositor reads [Wayland] InputMethod and"
+say "     the entry's Exec at startup (editing the entry alone is not a live reload)."
+say "  2. verify:  $0 --verify   (fcitx5 XDG_CONFIG should be $REAL_CONFIG_HOME, not the ke root)"
+say "  3. focus a text field and press Ctrl+Space (fcitx5 default trigger key)."
 say "     X11 apps additionally need a re-login for XMODIFIERS to be exported."
+if ((WRAPPER)); then
+    say "  4. note: selecting an entry in Kinetic Settings -> Virtual Keyboard rewrites"
+    say "     [Wayland] InputMethod back to the stock desktop file and drops the wrapper;"
+    say "     re-run this script if that happens."
+    say "  5. deploying this dotfiles tree to another machine or user? re-run the script"
+    say "     there: the entry's Exec bakes that machine's real config/cache paths."
+fi
